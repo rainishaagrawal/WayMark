@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -80,7 +80,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-white h-screen flex flex-col fixed left-0 top-0 z-30 select-none overflow-hidden border-r border-[#E5E5E7]/60">
+    <aside className="w-72 bg-white h-screen flex flex-col fixed left-0 top-0 z-30 select-none overflow-hidden border-r border-[#E5E5E7]/60">
       {/* Brand Logo Header */}
       <div className="p-5 border-b border-black/[0.06] flex items-center justify-between">
         <div className="flex items-center gap-3">

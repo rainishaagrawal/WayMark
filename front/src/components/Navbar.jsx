@@ -36,7 +36,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="h-20 bg-transparent sticky top-0 z-20 px-8 flex items-center justify-between ml-64">
+    <header className="h-20 bg-transparent sticky top-0 z-20 px-8 flex items-center justify-between ml-72">
       {/* Global Search Bar */}
       <div className="flex items-center gap-3 w-[450px]">
         <form onSubmit={handleSearchSubmit} className="relative w-full">

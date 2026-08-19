@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
@@ -12,7 +12,7 @@ export default function DashboardLayout() {
 
       <Sidebar />
       <Navbar />
-      <main className="ml-64 flex-1 p-6 overflow-y-auto relative z-10">
+      <main className="ml-72 flex-1 p-6 overflow-y-auto relative z-10">
         <div className="max-w-7xl mx-auto">
           <Outlet />
         </div>
