@@ -100,17 +100,17 @@ export default function AIPlanner() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-<div className="relative h-64 rounded-2xl overflow-hidden shadow-glow mb-6 bg-[#EBF8F4]">
-  <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000" alt="AI Trip Planner Mountains" className="w-full h-full object-cover opacity-80" />
-  <div className="absolute inset-0 bg-gradient-to-r from-[#EBF8F4]/90 via-[#EBF8F4]/70 to-transparent" />
-  
-  <div className="absolute inset-0 p-4 sm:p-8 flex flex-col justify-center w-full md:w-2/3">
-    <div className="flex items-center gap-2 mb-3">
-      <span className="text-[10px] font-bold tracking-widest text-[#D4AF37] uppercase bg-white px-3 py-1 rounded-full shadow-sm">
-        TRIP BUILDER SUITE
-      </span>
-    </div>
-    <h1 className="text-3xl font-bold text-[#1A3626] flex items-center gap-2 mb-2">
+  <div className="relative h-[320px] sm:h-[280px] md:h-64 rounded-2xl overflow-hidden shadow-glow mb-6 bg-[#EBF8F4]">
+    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000" alt="AI Trip Planner Mountains" className="w-full h-full object-cover opacity-80" />
+    <div className="absolute inset-0 bg-gradient-to-r from-[#EBF8F4]/90 via-[#EBF8F4]/80 md:via-[#EBF8F4]/70 to-transparent md:to-transparent" />
+    
+    <div className="absolute inset-0 p-5 sm:p-8 flex flex-col justify-start pt-10 sm:justify-center sm:pt-0 w-full md:w-2/3">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-[10px] font-bold tracking-widest text-[#D4AF37] uppercase bg-white px-3 py-1 rounded-full shadow-sm">
+          TRIP BUILDER SUITE
+        </span>
+      </div>
+      <h1 className="text-2xl sm:text-3xl font-bold text-[#1A3626] flex items-center gap-2 mb-2 pr-4">
       {plannerMode === 'AI' ? <Sparkles className="w-8 h-8 text-[#D4AF37]" /> : <PenTool className="w-8 h-8 text-[#D4AF37]" />}
       {plannerMode === 'AI' ? 'AI Neural Trip Planner' : 'Manual Custom Trip Creator'}
     </h1>
