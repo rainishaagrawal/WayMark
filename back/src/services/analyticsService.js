@@ -20,15 +20,31 @@ export const getUserAnalytics = async (userId) => {
 
   const countriesSet = new Set();
   const travelTimeline = [];
+  const topDestinationsMap = new Map();
 
   trips.forEach((t) => {
-    if (t.destination?.country) countriesSet.add(t.destination.country);
+    if (t.destination?.country) {
+      countriesSet.add(t.destination.country);
+      const current = topDestinationsMap.get(t.destination.country) || 0;
+      topDestinationsMap.set(t.destination.country, current + 1);
+    }
     travelTimeline.push({ tripId: t._id, year: new Date(t.startDate).getFullYear(), destinationName: t.title });
   });
+
+  const topDestinations = Array.from(topDestinationsMap.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 4);
+
+  const currentYear = new Date().getFullYear();
+  const monthlySpending = Array(12).fill(0);
 
   const categoryBreakdown = expenses.reduce(
     (acc, item) => {
       acc[item.category] = (acc[item.category] || 0) + item.amount;
+      
+      const expDate = new Date(item.date);
+      if (expDate.getFullYear() === currentYear) {
+        monthlySpending[expDate.getMonth()] += item.amount;
+      }
+      
       return acc;
     },
     { flights: 0, hotels: 0, food: 0, shopping: 0, transport: 0, activities: 0, miscellaneous: 0 }
@@ -50,5 +66,6 @@ export const getUserAnalytics = async (userId) => {
     { upsert: true, new: true }
   );
 
-  return analytics;
+  // Return extra dynamic fields not stored in the schema
+  return { ...analytics.toObject(), monthlySpending, topDestinations };
 };
