@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
 
-    toast.success(`Welcome to VoyageAI, ${userData.name}!`);
+    toast.success(`Welcome to WayMark, ${userData.name}!`);
     return userData;
   };
 

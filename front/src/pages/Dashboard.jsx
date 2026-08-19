@@ -74,7 +74,7 @@ export default function Dashboard() {
             </span>
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">
-            {isNewUser ? `Welcome to VoyageAI, ${user?.name || 'Traveler'}! 🚀` : `Good day, ${user?.name}`}
+            {isNewUser ? `Welcome to WayMark, ${user?.name || 'Traveler'}! 🚀` : `Good day, ${user?.name}`}
           </h1>
           <p className="text-xs text-white/70 mt-1 max-w-xl">
             {isNewUser

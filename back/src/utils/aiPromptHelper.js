@@ -1,6 +1,6 @@
 export const buildItineraryPrompt = ({ destination, days, budget, interests, foodPref, travelStyle }) => {
   return `
-    You are an expert AI Travel Planner for VoyageAI.
+    You are an expert AI Travel Planner for WayMark.
     Generate a detailed ${days}-day travel itinerary for "${destination}".
     User Preferences:
     - Budget: ${budget}

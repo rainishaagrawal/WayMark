@@ -17,7 +17,7 @@ export const uploadFileToCloud = async (userId, file) => {
       process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_CLOUD_NAME !== "your_cloudinary_cloud_name" &&
       process.env.CLOUDINARY_API_SECRET && !process.env.CLOUDINARY_API_SECRET.includes("***")
     ) {
-      const uploadStream = cloudinary.uploader.upload_stream({ folder: "voyageai" }, async (error, result) => {
+      const uploadStream = cloudinary.uploader.upload_stream({ folder: "WayMark" }, async (error, result) => {
         if (error) {
           return reject(new ApiError(HTTP_STATUS.INTERNAL_SERVER_ERROR, `Cloudinary Upload Error: ${error.message}`));
         }

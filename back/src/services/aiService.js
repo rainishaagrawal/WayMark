@@ -262,9 +262,9 @@ export const aiChatAssistant = async (message, context = {}) => {
   const prompt = `User Ask: "${message}". Context: ${JSON.stringify(context)}. Provide helpful, concise travel recommendations in JSON format: {"reply": "String", "suggestions": ["String"]}`;
 
   const mockFallback = {
-    reply: "I am your VoyageAI assistant! How can I help you plan your next adventure?",
+    reply: "I am your WayMark assistant! How can I help you plan your next adventure?",
     suggestions: ["Find top hotels", "Check local weather", "Generate a 3-day itinerary"],
   };
 
-  return await executeAiPrompt(prompt, "You are VoyageAI Chatbot.", mockFallback);
+  return await executeAiPrompt(prompt, "You are WayMark Chatbot.", mockFallback);
 };

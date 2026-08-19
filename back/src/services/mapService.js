@@ -5,7 +5,7 @@ import { HTTP_STATUS } from "../constants.js";
 const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
 const OSRM_URL = "https://router.project-osrm.org/route/v1";
 
-const axiosConfig = { headers: { "User-Agent": "VoyageAI-Backend/1.0 (contact@voyageai.com)" } };
+const axiosConfig = { headers: { "User-Agent": "WayMark-Backend/1.0 (contact@WayMark.com)" } };
 
 export const getCoordinates = async (query) => {
   if (!query) throw new ApiError(HTTP_STATUS.BAD_REQUEST, "Search query is required");

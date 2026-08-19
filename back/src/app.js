@@ -107,8 +107,8 @@ app.get("/", (req, res) => {
   res.status(HTTP_STATUS.OK).json(
     new ApiResponse(
       HTTP_STATUS.OK,
-      { service: "VoyageAI Backend API", version: "1.1.0", status: "RUNNING", healthCheck: "/health", apiBase: "/api/v1" },
-      "Welcome to VoyageAI Backend API Service! Everything is working perfectly."
+      { service: "WayMark Backend API", version: "1.1.0", status: "RUNNING", healthCheck: "/health", apiBase: "/api/v1" },
+      "Welcome to WayMark Backend API Service! Everything is working perfectly."
     )
   );
 });
@@ -118,7 +118,7 @@ app.get("/health", (req, res) => {
     new ApiResponse(
       HTTP_STATUS.OK,
       { uptime: process.uptime(), timestamp: new Date().toISOString(), environment: process.env.NODE_ENV || "development" },
-      "VoyageAI API Service is healthy and operational."
+      "WayMark API Service is healthy and operational."
     )
   );
 });

@@ -84,12 +84,10 @@ export default function Sidebar() {
       {/* Brand Logo Header */}
       <div className="p-5 border-b border-black/[0.06] flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-[14px] bg-[#0F2B24] flex items-center justify-center shadow-sm">
-            <Compass className="w-5 h-5 text-[#D4AF37]" />
-          </div>
+          <img src="/waymark-logo.png" alt="WayMark" className="w-10 h-10 object-contain drop-shadow-sm" />
           <div>
             <h1 className="font-bold text-lg text-[#2A2A2A] tracking-tight flex items-center gap-1.5">
-              Voyage<span className="text-[#D4AF37]">AI</span>
+              WayMark
             </h1>
             <span className="text-[10px] text-[#8B8B8B] uppercase tracking-wider font-semibold">Pro Suite v2.4</span>
           </div>

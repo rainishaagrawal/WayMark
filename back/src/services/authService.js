@@ -28,7 +28,7 @@ export const registerUser = async (userData) => {
   createNotification({
     user: user._id,
     type: "SYSTEM",
-    title: "Welcome to VoyageAI! 🚀",
+    title: "Welcome to WayMark! 🚀",
     message: `Hi ${user.name}, your AI travel engine is ready. Let's plan your first trip!`,
   }).catch((e) => console.error("Welcome notification error:", e));
 
@@ -130,7 +130,7 @@ export const googleOAuthPlaceholder = async (googlePayload) => {
     createNotification({
       user: user._id,
       type: "SYSTEM",
-      title: "Welcome to VoyageAI! 🚀",
+      title: "Welcome to WayMark! 🚀",
       message: `Hi ${user.name}, your AI travel engine is ready. Let's plan your first trip!`,
     }).catch((e) => console.error("Welcome notification error:", e));
   }

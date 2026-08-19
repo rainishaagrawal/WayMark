@@ -238,7 +238,7 @@ export default function Memories() {
   const handleShare = async (mem) => {
     const shareText = `${mem.summary || 'A travel memory'}${mem.locationName ? ` — ${mem.locationName}` : ''}`;
     if (navigator.share) {
-      try { await navigator.share({ title: 'VoyageAI Memory', text: shareText, url: mem.mediaUrl }); }
+      try { await navigator.share({ title: 'WayMark Memory', text: shareText, url: mem.mediaUrl }); }
       catch { /* user cancelled */ }
     } else {
       navigator.clipboard.writeText(`${shareText}\n${mem.mediaUrl}`);

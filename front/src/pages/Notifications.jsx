@@ -30,7 +30,7 @@ export default function Notifications() {
         {notifications.length === 0 ? (
           <div className="text-center py-8">
             <Bell className="w-8 h-8 text-[#8B8B8B] mx-auto mb-2" />
-            <p className="text-xs text-[#8B8B8B]">No notifications yet — they'll appear here as you use VoyageAI.</p>
+            <p className="text-xs text-[#8B8B8B]">No notifications yet — they'll appear here as you use WayMark.</p>
           </div>
         ) : (
           notifications.map((n) => (

@@ -5,7 +5,7 @@ import { createNotification } from "./notificationService.js";
 import { BADGE_CODES } from "../constants.js";
 
 const BADGE_DEFINITIONS = {
-  [BADGE_CODES.FIRST_TRIP]: { title: "First Journey", description: "Completed your first trip with VoyageAI!", icon: "🏆" },
+  [BADGE_CODES.FIRST_TRIP]: { title: "First Journey", description: "Completed your first trip with WayMark!", icon: "🏆" },
   [BADGE_CODES.EXPLORER_3]: { title: "Explorer", description: "Completed 3 trips.", icon: "🧭" },
   [BADGE_CODES.GLOBETROTTER_5]: { title: "Globetrotter", description: "Completed 5 trips.", icon: "🌍" },
   [BADGE_CODES.LEGEND_10]: { title: "Travel Legend", description: "Completed 10 trips.", icon: "👑" },

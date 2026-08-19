@@ -109,7 +109,7 @@ export default function Register() {
           </h2>
           <p className="text-sm text-[#8B8B8B] mt-2 text-center max-w-sm leading-relaxed">
             {step === 1
-              ? 'Join VoyageAI to plan your trips with intelligent memory-driven insights.'
+              ? 'Join WayMark to plan your trips with intelligent memory-driven insights.'
               : 'This helps our AI tailor recommendations just for you. You can change this anytime.'}
           </p>
 

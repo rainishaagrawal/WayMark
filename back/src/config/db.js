@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const MAX_RETRIES = 5;
 const INITIAL_RETRY_INTERVAL_MS = 2000;
-const DEFAULT_LOCAL_MONGO_URI = "mongodb://127.0.0.1:27017/voyageai";
+const DEFAULT_LOCAL_MONGO_URI = "mongodb://127.0.0.1:27017/WayMark";
 
 export const connectDB = async (retryCount = 0) => {
   const mongoUri = process.env.MONGODB_URI || DEFAULT_LOCAL_MONGO_URI;

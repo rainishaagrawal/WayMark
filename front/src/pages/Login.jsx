@@ -86,7 +86,7 @@ export default function Login() {
 
           {/* Heading */}
           <h1 className="text-2xl font-bold text-[#1A1A1A] tracking-tight text-center">
-            Welcome to <span className="text-[#355E4B]">VoyageAI</span>
+            Welcome to <span className="text-[#355E4B]">WayMark</span>
           </h1>
           <p className="text-sm text-[#8B8B8B] mt-2 text-center leading-relaxed max-w-xs">
             Sign in to access your AI travel itineraries, memories & Travel DNA.

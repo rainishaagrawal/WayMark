@@ -61,7 +61,7 @@ const DEFAULT_CODE = 'USD';
 
 export function CurrencyProvider({ children }) {
   const [currencyCode, setCurrencyCode] = useState(() => {
-    return localStorage.getItem('voyageai_currency') || DEFAULT_CODE;
+    return localStorage.getItem('WayMark_currency') || DEFAULT_CODE;
   });
 
   const currencyInfo = ALL_CURRENCIES.find((c) => c.code === currencyCode) ||
@@ -69,7 +69,7 @@ export function CurrencyProvider({ children }) {
 
   const setDefaultCurrency = (code) => {
     setCurrencyCode(code);
-    localStorage.setItem('voyageai_currency', code);
+    localStorage.setItem('WayMark_currency', code);
 
     // Synchronize to user profile if logged in
     api.patch('/users/profile', { preferredCurrency: code }).catch(() => {});

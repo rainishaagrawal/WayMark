@@ -11,7 +11,7 @@ export default function ProtectedRoute() {
       <div className="h-screen w-screen bg-black flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="w-8 h-8 text-[#D4AF37] animate-spin" />
-          <p className="text-xs text-[#8B8B8B] font-medium">Loading VoyageAI Workspace...</p>
+          <p className="text-xs text-[#8B8B8B] font-medium">Loading WayMark Workspace...</p>
         </div>
       </div>
     );

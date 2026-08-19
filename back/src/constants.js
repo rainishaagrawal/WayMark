@@ -1,8 +1,8 @@
 /**
- * Centralized Application Constants for VoyageAI Service
+ * Centralized Application Constants for WayMark Service
  */
 
-export const DB_NAME = "voyageai";
+export const DB_NAME = "WayMark";
 
 export const HTTP_STATUS = Object.freeze({
   OK: 200,

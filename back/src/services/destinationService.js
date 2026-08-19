@@ -61,7 +61,7 @@ export const findOrCreateDestinationByName = async (destinationName, { lat, lon,
     city: cityName,
     country: destinationName.split(",")[1]?.trim() || "International",
     location: { type: "Point", coordinates: [lon || 0, lat || 0] },
-    description: `Explore ${destinationName}, curated by VoyageAI.`,
+    description: `Explore ${destinationName}, curated by WayMark.`,
     category: Array.isArray(category) ? category : [category].filter(Boolean),
     images: [resolvedImage],
   });

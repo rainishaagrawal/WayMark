@@ -3,8 +3,8 @@ import { ShieldAlert, Users, Server, Cpu, Database, Activity, Key } from 'lucide
 
 export default function Admin() {
   const usersList = [
-    { name: 'Alex Vance', email: 'alex.vance@voyageai.io', role: 'User', status: 'Active' },
-    { name: 'Admin Account', email: 'admin@voyageai.io', role: 'Admin', status: 'Active' },
+    { name: 'Alex Vance', email: 'alex.vance@WayMark.io', role: 'User', status: 'Active' },
+    { name: 'Admin Account', email: 'admin@WayMark.io', role: 'Admin', status: 'Active' },
   ];
 
   return (
@@ -16,7 +16,7 @@ export default function Admin() {
           </span>
         </div>
         <h1 className="text-xl font-bold text-[#2A2A2A] flex items-center gap-2">
-          <ShieldAlert className="w-5 h-5 text-[#F87171]" /> VoyageAI Platform Management
+          <ShieldAlert className="w-5 h-5 text-[#F87171]" /> WayMark Platform Management
         </h1>
         <p className="text-xs text-[#8B8B8B] mt-0.5">Monitor API latency, database health, active user tokens & AI token usage.</p>
       </div>
