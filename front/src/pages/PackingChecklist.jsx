@@ -219,19 +219,19 @@ export default function PackingChecklist() {
           )}
 
           {/* Add Item Form */}
-          <form onSubmit={handleAddItem} className="flex gap-3 items-center">
+          <form onSubmit={handleAddItem} className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
             <input
               type="text"
               value={newItem}
               onChange={(e) => setNewItem(e.target.value)}
               placeholder="Add an item..."
-              className="flex-1 bg-[#F9FBF8] border border-[#E5E5E7]/60 text-sm text-[#1A1A1A] placeholder-[#C4C4C4] px-5 py-3 rounded-xl focus:outline-none focus:border-[#355E4B] transition-colors"
+              className="flex-1 bg-[#F9FBF8] border border-[#E5E5E7]/60 text-sm text-[#1A1A1A] placeholder-[#C4C4C4] px-5 py-3 rounded-xl focus:outline-none focus:border-[#355E4B] transition-colors w-full"
             />
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <select
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
-                className="bg-white border border-[#E5E5E7] text-sm text-[#1A1A1A] pl-4 pr-9 py-3 rounded-xl focus:outline-none appearance-none font-medium shadow-sm"
+                className="w-full bg-white border border-[#E5E5E7] text-sm text-[#1A1A1A] pl-4 pr-9 py-3 rounded-xl focus:outline-none appearance-none font-medium shadow-sm"
               >
                 {CATEGORIES.map((c) => (
                   <option key={c} value={c}>{c}</option>
@@ -241,7 +241,7 @@ export default function PackingChecklist() {
             </div>
             <button
               type="submit"
-              className="w-12 h-12 flex items-center justify-center bg-gradient-to-r from-[#D4AF37] to-[#F0C96B] hover:brightness-110 text-black rounded-xl shadow-md shrink-0 transition-all"
+              className="w-full sm:w-12 h-12 flex items-center justify-center bg-gradient-to-r from-[#D4AF37] to-[#F0C96B] hover:brightness-110 text-black rounded-xl shadow-md shrink-0 transition-all"
             >
               <Plus className="w-5 h-5" />
             </button>

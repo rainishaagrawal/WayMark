@@ -104,7 +104,7 @@ export default function AIPlanner() {
   <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000" alt="AI Trip Planner Mountains" className="w-full h-full object-cover opacity-80" />
   <div className="absolute inset-0 bg-gradient-to-r from-[#EBF8F4]/90 via-[#EBF8F4]/70 to-transparent" />
   
-  <div className="absolute inset-0 p-8 flex flex-col justify-center w-2/3">
+  <div className="absolute inset-0 p-4 sm:p-8 flex flex-col justify-center w-full md:w-2/3">
     <div className="flex items-center gap-2 mb-3">
       <span className="text-[10px] font-bold tracking-widest text-[#D4AF37] uppercase bg-white px-3 py-1 rounded-full shadow-sm">
         TRIP BUILDER SUITE
@@ -121,7 +121,7 @@ export default function AIPlanner() {
     </p>
   </div>
 
-  <div className="absolute bottom-6 right-6 flex items-center gap-2 bg-black/40 backdrop-blur-md p-1.5 rounded-xl shadow-lg border border-white/10">
+  <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 flex items-center gap-1 md:gap-2 bg-black/40 backdrop-blur-md p-1.5 rounded-xl shadow-lg border border-white/10 scale-90 md:scale-100 origin-bottom-right">
     <button
       onClick={() => setPlannerMode('AI')}
       className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold transition-all ${
@@ -166,7 +166,7 @@ export default function AIPlanner() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-[#8B8B8B] font-semibold mb-1 uppercase text-[10px]">Start Date</label>
                   <div className="relative">
@@ -226,7 +226,7 @@ export default function AIPlanner() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-[#8B8B8B] font-semibold mb-1 uppercase text-[10px]">Food Pref</label>
                   <div className="relative">
@@ -383,7 +383,7 @@ export default function AIPlanner() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-[#8B8B8B] font-semibold mb-1 uppercase text-[10px]">Start Date</label>
                 <input type="date" value={manualStart} onChange={(e) => setManualStart(e.target.value)} className="w-full glass-inset text-[#2A2A2A] p-3 rounded-xl focus:outline-none" required />
