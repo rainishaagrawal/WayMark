@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTrips } from '../context/TripContext';
 import { User, MapPin, Award, Dna, Shield, Camera, Edit2, Check, Landmark, Mountain, Utensils, Wallet } from 'lucide-react';
@@ -192,7 +192,7 @@ export default function Profile() {
             </h3>
 
             {dna ? (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 
                 <div className="bg-[#FAFAFA] border border-gray-50 rounded-[24px] p-5 flex flex-col items-start gap-4">
                   <div className="p-2.5 bg-amber-50 rounded-full shrink-0">

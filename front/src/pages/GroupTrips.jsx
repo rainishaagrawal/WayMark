@@ -148,7 +148,7 @@ export default function GroupTrips() {
         </div>
 
         <div className="relative z-10 flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
-          <form onSubmit={handleJoin} className="flex items-center gap-2 w-full sm:w-auto">
+          <form onSubmit={handleJoin} className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
             <input
               type="text"
               value={joinCode}

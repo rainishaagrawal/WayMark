@@ -258,7 +258,7 @@ export default function Dashboard() {
         /* RETURNING USER DYNAMIC PERSONALIZED DASHBOARD */
         <div className="space-y-6">
           {/* Key Metrics Strip */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="p-5 bg-white rounded-3xl border border-[#E5E5E7]/60 shadow-sm flex flex-col justify-between h-32">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-[#F5F7F2] flex items-center justify-center">
