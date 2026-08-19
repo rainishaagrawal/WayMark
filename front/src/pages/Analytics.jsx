@@ -227,35 +227,35 @@ export default function Analytics() {
         <div className="space-y-6">
           
           {/* Lifetime Stats */}
-          <div className="bg-white rounded-[32px] p-8 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-[32px] p-6 sm:p-8 shadow-sm border border-gray-100">
             <h3 className="font-bold text-[#1A1A1A] mb-6">Lifetime Statistics</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-[#FAFAFA] rounded-[24px] p-5 flex flex-col justify-between aspect-square border border-gray-50">
-                <p className="text-[10px] font-bold text-[#8B8B8B] uppercase tracking-wider">Total Spent</p>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              <div className="bg-[#FAFAFA] rounded-[24px] p-4 sm:p-5 flex flex-col justify-between aspect-square border border-gray-50 overflow-hidden">
+                <p className="text-[9px] sm:text-[10px] font-bold text-[#8B8B8B] uppercase tracking-wider truncate">Total Spent</p>
                 <div>
-                  <p className="text-xl font-bold text-[#1A1A1A]">{formatAmount(analytics?.totalExpensesAmount || 0)}</p>
+                  <p className="text-lg sm:text-xl font-bold text-[#1A1A1A] truncate">{formatAmount(analytics?.totalExpensesAmount || 0)}</p>
                   <TrendingUp className="w-5 h-5 text-[#34D399] mt-2 opacity-80" />
                 </div>
               </div>
-              <div className="bg-[#FAFAFA] rounded-[24px] p-5 flex flex-col justify-between aspect-square border border-gray-50">
-                <p className="text-[10px] font-bold text-[#8B8B8B] uppercase tracking-wider">Countries Visited</p>
+              <div className="bg-[#FAFAFA] rounded-[24px] p-4 sm:p-5 flex flex-col justify-between aspect-square border border-gray-50 overflow-hidden">
+                <p className="text-[9px] sm:text-[10px] font-bold text-[#8B8B8B] uppercase tracking-wider truncate">Countries Visited</p>
                 <div>
-                  <p className="text-3xl font-bold text-[#1A1A1A]">{analytics?.countriesVisited?.length || 0}</p>
-                  <Globe className="w-6 h-6 text-[#9CA3AF] mt-2 opacity-50" />
+                  <p className="text-2xl sm:text-3xl font-bold text-[#1A1A1A]">{analytics?.countriesVisited?.length || 0}</p>
+                  <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-[#9CA3AF] mt-2 opacity-50" />
                 </div>
               </div>
-              <div className="bg-[#FAFAFA] rounded-[24px] p-5 flex flex-col justify-between aspect-square border border-gray-50">
-                <p className="text-[10px] font-bold text-[#8B8B8B] uppercase tracking-wider">Total Trips</p>
+              <div className="bg-[#FAFAFA] rounded-[24px] p-4 sm:p-5 flex flex-col justify-between aspect-square border border-gray-50 overflow-hidden">
+                <p className="text-[9px] sm:text-[10px] font-bold text-[#8B8B8B] uppercase tracking-wider truncate">Total Trips</p>
                 <div>
-                  <p className="text-3xl font-bold text-[#1A1A1A]">{analytics?.totalTripsCount || 0}</p>
-                  <Briefcase className="w-6 h-6 text-[#9CA3AF] mt-2 opacity-50" />
+                  <p className="text-2xl sm:text-3xl font-bold text-[#1A1A1A]">{analytics?.totalTripsCount || 0}</p>
+                  <Briefcase className="w-5 h-5 sm:w-6 sm:h-6 text-[#9CA3AF] mt-2 opacity-50" />
                 </div>
               </div>
-              <div className="bg-[#FAFAFA] rounded-[24px] p-5 flex flex-col justify-between aspect-square border border-gray-50">
-                <p className="text-[10px] font-bold text-[#8B8B8B] uppercase tracking-wider">Completed Trips</p>
+              <div className="bg-[#FAFAFA] rounded-[24px] p-4 sm:p-5 flex flex-col justify-between aspect-square border border-gray-50 overflow-hidden">
+                <p className="text-[9px] sm:text-[10px] font-bold text-[#8B8B8B] uppercase tracking-wider truncate">Completed Trips</p>
                 <div>
-                  <p className="text-3xl font-bold text-[#1A1A1A]">{analytics?.completedTripsCount || 0}</p>
-                  <CheckCircle2 className="w-6 h-6 text-[#34D399] mt-2 opacity-80" />
+                  <p className="text-2xl sm:text-3xl font-bold text-[#1A1A1A]">{analytics?.completedTripsCount || 0}</p>
+                  <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-[#34D399] mt-2 opacity-80" />
                 </div>
               </div>
             </div>
