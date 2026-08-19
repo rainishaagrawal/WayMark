@@ -80,13 +80,13 @@ export default function Login() {
         <div className="bg-white rounded-[28px] shadow-xl p-10 flex flex-col items-center">
 
           {/* Logo */}
-          <div className="w-14 h-14 rounded-[18px] bg-[#F5F7F2] border border-[#E5E5E7]/60 flex items-center justify-center mb-5 shadow-sm">
-            <img src="/waymark-logo.png" alt="WayMark Logo" className="w-9 h-9 object-contain" />
+          <div className="flex flex-col items-center justify-center mb-6">
+            <img src="/waymark-logo.png" alt="WayMark Logo" className="w-32 h-auto object-contain drop-shadow-sm" />
           </div>
 
           {/* Heading */}
           <h1 className="text-2xl font-bold text-[#1A1A1A] tracking-tight text-center">
-            Welcome to <span className="text-[#355E4B]">WayMark</span>
+            Welcome Back
           </h1>
           <p className="text-sm text-[#8B8B8B] mt-2 text-center leading-relaxed max-w-xs">
             Sign in to access your AI travel itineraries, memories & Travel DNA.
