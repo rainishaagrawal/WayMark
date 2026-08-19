@@ -78,7 +78,7 @@ export default function Profile() {
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         
-        <div className="relative z-10 w-full flex items-end justify-between">
+        <div className="relative z-10 w-full flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
           <div className="flex items-center gap-6">
             <div className="relative">
               <button
@@ -264,3 +264,4 @@ export default function Profile() {
     </div>
   );
 }
+

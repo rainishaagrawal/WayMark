@@ -213,7 +213,7 @@ export default function LandmarkRecognition() {
               <p className="text-[15px] text-[#8B8B8B] font-medium mb-10 max-w-sm">Upload a photo and click Generate AI to magically identify it.</p>
 
               {/* Step cards */}
-              <div className="grid grid-cols-3 gap-4 w-full">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
                 <div className="flex flex-col items-center p-4 rounded-[20px] bg-[#FAFAFA] border border-gray-100">
                   <div className="w-8 h-8 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-[#1A3626] font-bold text-xs mb-3">1</div>
                   <span className="text-[13px] font-bold text-[#1A1A1A]">Identify</span>
@@ -237,3 +237,4 @@ export default function LandmarkRecognition() {
     </div>
   );
 }
+

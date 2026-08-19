@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Camera, Plus, Loader2, Trash2, Share2, X, Upload, Search, Pencil, MapPin, Calendar, Bookmark } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/axios';
@@ -6,7 +6,7 @@ import { useTrips } from '../context/TripContext';
 
 const getTripDisplayName = (t) => t?.destinationName || t?.title || 'Untitled Trip';
 
-// ─── Edit Memory Modal ─────────────────────────────────────────────────
+// â”€â”€â”€ Edit Memory Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function EditMemoryModal({ memory, trips, onClose, onSave }) {
   const [summary, setSummary] = useState(memory.summary || '');
   const [locationName, setLocationName] = useState(memory.locationName || '');
@@ -98,9 +98,9 @@ function EditMemoryModal({ memory, trips, onClose, onSave }) {
   );
 }
 
-// ─── SVG Banner Graphic ───────────────────────────────────────────────
+// â”€â”€â”€ SVG Banner Graphic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const BannerGraphic = () => (
-  <svg className="absolute right-0 bottom-0 h-full w-[600px] object-cover pointer-events-none" viewBox="0 0 600 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg className="absolute right-0 bottom-0 h-full w-[600px] object-cover pointer-events-none hidden md:block" viewBox="0 0 600 200" fill="none" xmlns="http://www.w3.org/2000/svg">
     {/* Sun */}
     <circle cx="280" cy="70" r="12" fill="#FCD34D" opacity="0.8" />
     
@@ -157,7 +157,7 @@ const BannerGraphic = () => (
   </svg>
 );
 
-// ─── Main Memories Component ───────────────────────────────────────────
+// â”€â”€â”€ Main Memories Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function Memories() {
   const { trips } = useTrips();
   const [memories, setMemories] = useState([]);
@@ -236,7 +236,7 @@ export default function Memories() {
   };
 
   const handleShare = async (mem) => {
-    const shareText = `${mem.summary || 'A travel memory'}${mem.locationName ? ` — ${mem.locationName}` : ''}`;
+    const shareText = `${mem.summary || 'A travel memory'}${mem.locationName ? ` â€” ${mem.locationName}` : ''}`;
     if (navigator.share) {
       try { await navigator.share({ title: 'WayMark Memory', text: shareText, url: mem.mediaUrl }); }
       catch { /* user cancelled */ }
@@ -257,7 +257,7 @@ export default function Memories() {
   return (
     <div className="space-y-6 animate-fade-in">
       
-      {/* ── Header Banner ── */}
+      {/* â”€â”€ Header Banner â”€â”€ */}
       <div className="relative bg-[#FAFAF5] rounded-[32px] overflow-hidden min-h-[160px] flex items-center px-10 border border-gray-100 shadow-sm">
         <BannerGraphic />
         <div className="relative z-10 flex items-center gap-6 max-w-xl">
@@ -273,7 +273,7 @@ export default function Memories() {
         </div>
       </div>
 
-      {/* ── Search and Action ── */}
+      {/* â”€â”€ Search and Action â”€â”€ */}
       <div className="flex items-center justify-between gap-4">
         <div className="relative w-full max-w-md">
           <Search className="w-4 h-4 text-[#8B8B8B] absolute left-4 top-1/2 -translate-y-1/2" />
@@ -299,7 +299,7 @@ export default function Memories() {
         </button>
       </div>
 
-      {/* ── Content Grid ── */}
+      {/* â”€â”€ Content Grid â”€â”€ */}
       {loading ? (
         <div className="flex justify-center p-20">
           <Loader2 className="w-8 h-8 text-[#D4AF37] animate-spin" />
@@ -389,7 +389,7 @@ export default function Memories() {
         </div>
       )}
 
-      {/* ── Upload New Memory Modal ── */}
+      {/* â”€â”€ Upload New Memory Modal â”€â”€ */}
       {showModal && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-[24px] w-full max-w-md shadow-xl border border-gray-100 overflow-hidden flex flex-col max-h-[90vh]">
@@ -490,3 +490,4 @@ export default function Memories() {
     </div>
   );
 }
+
