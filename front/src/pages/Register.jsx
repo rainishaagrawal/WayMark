@@ -102,7 +102,7 @@ export default function Register() {
         <div className="bg-white rounded-[28px] shadow-xl p-8 sm:p-10 flex flex-col items-center animate-fade-in">
           {/* Header */}
           <div className="w-14 h-14 rounded-[18px] bg-[#F5F7F2] border border-[#E5E5E7]/60 flex items-center justify-center mb-5 shadow-sm">
-            <Compass className="w-7 h-7 text-[#355E4B]" />
+            <img src="/waymark-logo.png" alt="WayMark Logo" className="w-9 h-9 object-contain" />
           </div>
           <h2 className="text-2xl font-bold text-[#1A1A1A] tracking-tight text-center">
             {step === 1 ? 'Create your Account' : 'Travel Style & Preferences'}
