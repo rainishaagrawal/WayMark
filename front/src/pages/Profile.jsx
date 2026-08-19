@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTrips } from '../context/TripContext';
-import { User, MapPin, Award, Dna, Shield, Camera, Edit2, Check, Sparkles } from 'lucide-react';
+import { User, MapPin, Award, Dna, Shield, Camera, Edit2, Check, Landmark, Mountain, Utensils, Wallet } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/axios';
 
@@ -11,7 +11,7 @@ const INTEREST_OPTIONS = [
 ];
 
 export default function Profile() {
-  const { user, setUser, refreshUser } = useAuth();
+  const { user, setUser } = useAuth();
   const { badges, fetchBadges, trips } = useTrips();
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(user?.name || '');
@@ -65,93 +65,107 @@ export default function Profile() {
   const dna = user?.travelDNA;
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in pb-10">
+      
       {/* Header Banner */}
-      <div className="relative h-48 rounded-2xl overflow-hidden border border-black/[0.07] bg-gradient-to-r from-[#14213D]/50 via-[#0B1220] to-[#1F1608]/50">
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-        <div className="absolute bottom-4 left-6 flex items-end gap-4">
-          <div className="relative">
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="w-20 h-20 rounded-2xl border-2 border-[#D4AF37] overflow-hidden bg-white/[0.05] flex items-center justify-center relative group"
-            >
-              {user?.avatar ? (
-                <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
-              ) : (
-                <User className="w-8 h-8 text-[#D4AF37]" />
-              )}
-              <div className="absolute inset-0 bg-white/70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                {uploadingAvatar ? <span className="text-[9px] text-[#2A2A2A]">Uploading...</span> : <Camera className="w-5 h-5 text-[#2A2A2A]" />}
-              </div>
-            </button>
-            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
-          </div>
-          <div className="mb-1">
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold text-[#2A2A2A]">{user?.name}</h1>
-              {completedTrips > 0 && (
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/30">
-                  {completedTrips} TRIP{completedTrips !== 1 ? 'S' : ''} COMPLETED
-                </span>
-              )}
+      <div 
+        className="relative h-64 rounded-[32px] overflow-hidden shadow-sm bg-[#2A2A2A] flex items-end p-6 md:p-10"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 40%'
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        
+        <div className="relative z-10 w-full flex items-end justify-between">
+          <div className="flex items-center gap-6">
+            <div className="relative">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="w-24 h-24 rounded-[28px] border-4 border-amber-400 overflow-hidden bg-white flex items-center justify-center relative group shadow-xl"
+              >
+                {user?.avatar ? (
+                  <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                ) : (
+                  <User className="w-10 h-10 text-gray-300" />
+                )}
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                  {uploadingAvatar ? <span className="text-[10px] text-white font-bold">...</span> : <Camera className="w-6 h-6 text-white" />}
+                </div>
+              </button>
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
             </div>
-            <p className="text-xs text-[#8B8B8B] flex items-center gap-1 mt-0.5">
-              <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> {trips.length} trip{trips.length !== 1 ? 's' : ''} planned
-            </p>
+            
+            <div className="pb-2">
+              <div className="flex items-center gap-3">
+                <h1 className="text-3xl font-bold text-white tracking-tight">{user?.name}</h1>
+                {completedTrips > 0 && (
+                  <span className="px-3 py-1 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-400/30">
+                    {completedTrips} TRIPS COMPLETED
+                  </span>
+                )}
+              </div>
+              <p className="text-sm text-gray-300 flex items-center gap-1.5 mt-2 font-medium">
+                <MapPin className="w-4 h-4 text-amber-400" /> {trips.length} trips planned
+              </p>
+            </div>
           </div>
+
+          <button
+            onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
+            disabled={saving}
+            className="bg-[#2A2A2A] hover:bg-black text-white font-semibold text-xs px-5 py-2.5 rounded-full transition-colors flex items-center gap-2 disabled:opacity-60 mb-2 border border-white/10 shadow-lg"
+          >
+            {isEditing ? <Check className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
+            <span>{saving ? 'Saving...' : isEditing ? 'Save Changes' : 'Edit Passport'}</span>
+          </button>
         </div>
-        <button
-          onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-          disabled={saving}
-          className="absolute top-4 right-4 bg-black/60 hover:bg-white/90 border border-white/[0.1] text-xs font-semibold text-[#2A2A2A] px-3.5 py-2 rounded-xl backdrop-blur-md transition-colors flex items-center gap-2 disabled:opacity-60"
-        >
-          {isEditing ? <Check className="w-4 h-4 text-[#D4AF37]" /> : <Edit2 className="w-4 h-4 text-[#8B8B8B]" />}
-          <span>{saving ? 'Saving...' : isEditing ? 'Save Changes' : 'Edit Passport'}</span>
-        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
         {/* Left Column: Personal Passport Details */}
-        <div className="glass-card p-6 space-y-5">
-          <h3 className="text-xs font-bold text-[#8B8B8B] uppercase tracking-wider flex items-center gap-2">
-            <Shield className="w-4 h-4 text-[#D4AF37]" /> Digital Passport
+        <div className="bg-white rounded-[32px] p-8 shadow-sm border border-gray-100 space-y-6">
+          <h3 className="text-xs font-bold text-[#1A1A1A] uppercase tracking-wider flex items-center gap-2">
+            <Shield className="w-5 h-5 text-amber-500" /> DIGITAL PASSPORT
           </h3>
 
-          <div className="space-y-4 text-xs">
+          <div className="space-y-6 text-sm">
             <div>
-              <label className="text-[10px] text-[#8B8B8B] block font-semibold uppercase">Full Name</label>
+              <label className="text-[10px] text-[#8B8B8B] block font-bold uppercase tracking-wider mb-1.5">Full Name</label>
               {isEditing ? (
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full glass-inset text-xs text-[#2A2A2A] p-2 rounded-xl mt-1" />
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full bg-[#FAFAFA] border border-gray-200 text-sm font-semibold text-[#1A1A1A] p-3 rounded-xl focus:outline-none focus:border-amber-400" />
               ) : (
-                <p className="text-sm font-semibold text-[#2A2A2A] mt-0.5">{user?.name}</p>
+                <p className="text-[15px] font-bold text-[#1A1A1A]">{user?.name}</p>
               )}
             </div>
 
             <div>
-              <label className="text-[10px] text-[#8B8B8B] block font-semibold uppercase">Email Address</label>
-              <p className="text-xs text-[#2A2A2A] font-medium mt-0.5">{user?.email}</p>
+              <label className="text-[10px] text-[#8B8B8B] block font-bold uppercase tracking-wider mb-1.5">Email Address</label>
+              <p className="text-[15px] text-[#1A1A1A] font-medium">{user?.email}</p>
             </div>
 
             <div>
-              <label className="text-[10px] text-[#8B8B8B] block font-semibold uppercase">Traveler Bio</label>
+              <label className="text-[10px] text-[#8B8B8B] block font-bold uppercase tracking-wider mb-1.5">Traveler Bio</label>
               {isEditing ? (
-                <textarea value={travelBio} onChange={(e) => setTravelBio(e.target.value)} className="w-full glass-inset text-xs text-[#2A2A2A] p-2 rounded-xl mt-1 h-20 resize-none" />
+                <textarea value={travelBio} onChange={(e) => setTravelBio(e.target.value)} className="w-full bg-[#FAFAFA] border border-gray-200 text-sm font-medium text-[#1A1A1A] p-3 rounded-xl h-24 resize-none focus:outline-none focus:border-amber-400" />
               ) : (
-                <p className="text-xs text-[#8B8B8B] mt-0.5 leading-relaxed">{travelBio || 'No bio added yet.'}</p>
+                <p className="text-[15px] text-[#2A2A2A] leading-relaxed">{travelBio || 'No bio added yet.'}</p>
               )}
             </div>
 
             <div>
-              <label className="text-[10px] text-[#8B8B8B] block font-semibold uppercase mb-1.5">Points of Interest</label>
+              <label className="text-[10px] text-[#8B8B8B] block font-bold uppercase tracking-wider mb-2.5">Points of Interest</label>
               {isEditing ? (
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-2">
                   {INTEREST_OPTIONS.map((interest) => (
                     <button
                       key={interest}
                       type="button"
                       onClick={() => toggleInterest(interest)}
-                      className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-all border ${
-                        interests.includes(interest) ? 'bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/40' : 'glass-inset text-[#8B8B8B]'
+                      className={`px-3.5 py-1.5 rounded-full text-[11px] font-bold transition-all border ${
+                        interests.includes(interest) ? 'bg-amber-50 text-amber-600 border-amber-200' : 'bg-[#FAFAFA] text-[#8B8B8B] border-gray-100 hover:bg-gray-100'
                       }`}
                     >
                       {interest}
@@ -159,9 +173,9 @@ export default function Profile() {
                   ))}
                 </div>
               ) : (
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-2">
                   {(interests.length > 0 ? interests : ['Not set yet']).map((i, idx) => (
-                    <span key={idx} className="text-[10px] glass-inset text-[#2A2A2A] px-2.5 py-1 rounded-lg">{i}</span>
+                    <span key={idx} className="bg-[#F5F7F2] text-[#2A2A2A] text-xs font-semibold px-4 py-2 rounded-full shadow-sm border border-[#F5F7F2]">{i}</span>
                   ))}
                 </div>
               )}
@@ -171,51 +185,80 @@ export default function Profile() {
 
         {/* Right 2 Columns: Travel DNA & Badges */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="glass-card p-6">
-            <h3 className="text-xs font-bold text-[#8B8B8B] uppercase tracking-wider flex items-center gap-2 mb-4">
-              <Dna className="w-4 h-4 text-[#D4AF37]" /> Travel DNA Snapshot
+          
+          <div className="bg-white rounded-[32px] p-8 shadow-sm border border-gray-100">
+            <h3 className="text-xs font-bold text-[#1A1A1A] uppercase tracking-wider flex items-center gap-2 mb-6">
+              <Dna className="w-5 h-5 text-amber-500" /> TRAVEL DNA SNAPSHOT
             </h3>
 
             {dna ? (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div className="p-4 rounded-xl glass-inset">
-                  <span className="text-[10px] text-[#8B8B8B] block uppercase font-semibold">Culture</span>
-                  <p className="text-sm font-bold text-[#D4AF37] mt-1">{dna.scores?.culture ?? 50}%</p>
+                
+                <div className="bg-[#FAFAFA] border border-gray-50 rounded-[24px] p-5 flex flex-col items-start gap-4">
+                  <div className="p-2.5 bg-amber-50 rounded-full shrink-0">
+                    <Landmark className="w-5 h-5 text-amber-600" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-[#8B8B8B] font-bold uppercase tracking-wider block mb-1">Culture</span>
+                    <p className="text-2xl font-bold text-amber-500">{dna.scores?.culture ?? 50}%</p>
+                  </div>
                 </div>
-                <div className="p-4 rounded-xl glass-inset">
-                  <span className="text-[10px] text-[#8B8B8B] block uppercase font-semibold">Adventure</span>
-                  <p className="text-sm font-bold text-[#2A2A2A] mt-1">{dna.scores?.adventure ?? 50}%</p>
+
+                <div className="bg-[#FAFAFA] border border-gray-50 rounded-[24px] p-5 flex flex-col items-start gap-4">
+                  <div className="p-2.5 bg-emerald-50 rounded-full shrink-0">
+                    <Mountain className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-[#8B8B8B] font-bold uppercase tracking-wider block mb-1">Adventure</span>
+                    <p className="text-2xl font-bold text-emerald-700">{dna.scores?.adventure ?? 50}%</p>
+                  </div>
                 </div>
-                <div className="p-4 rounded-xl glass-inset">
-                  <span className="text-[10px] text-[#8B8B8B] block uppercase font-semibold">Food</span>
-                  <p className="text-sm font-bold text-[#2A2A2A] mt-1">{dna.scores?.food ?? 50}%</p>
+
+                <div className="bg-[#FAFAFA] border border-gray-50 rounded-[24px] p-5 flex flex-col items-start gap-4">
+                  <div className="p-2.5 bg-orange-50 rounded-full shrink-0">
+                    <Utensils className="w-5 h-5 text-orange-500" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-[#8B8B8B] font-bold uppercase tracking-wider block mb-1">Food</span>
+                    <p className="text-2xl font-bold text-orange-600">{dna.scores?.food ?? 50}%</p>
+                  </div>
                 </div>
-                <div className="p-4 rounded-xl glass-inset">
-                  <span className="text-[10px] text-[#8B8B8B] block uppercase font-semibold">Spending</span>
-                  <p className="text-sm font-bold text-[#355E4B] mt-1">{dna.spendingHabit || 'BALANCED'}</p>
+
+                <div className="bg-[#FAFAFA] border border-gray-50 rounded-[24px] p-5 flex flex-col items-start gap-4">
+                  <div className="p-2.5 bg-green-50 rounded-full shrink-0">
+                    <Wallet className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-[#8B8B8B] font-bold uppercase tracking-wider block mb-1">Spending</span>
+                    <p className="text-[15px] font-bold text-green-700 mt-2 tracking-wide uppercase">{dna.spendingHabit || 'BALANCED'}</p>
+                  </div>
                 </div>
+
               </div>
             ) : (
-              <p className="text-xs text-[#8B8B8B]">Plan or complete a trip to start building your Travel DNA profile.</p>
+              <div className="text-center py-6">
+                 <p className="text-sm text-[#8B8B8B]">Plan or complete a trip to start building your Travel DNA profile.</p>
+              </div>
             )}
           </div>
 
-          <div className="glass-card p-6">
-            <h3 className="text-xs font-bold text-[#8B8B8B] uppercase tracking-wider flex items-center gap-2 mb-4">
-              <Award className="w-4 h-4 text-[#D4AF37]" /> Badges & Milestones
+          <div className="bg-white rounded-[32px] p-8 shadow-sm border border-gray-100 min-h-[160px]">
+            <h3 className="text-xs font-bold text-[#1A1A1A] uppercase tracking-wider flex items-center gap-2 mb-6">
+              <Award className="w-5 h-5 text-amber-500" /> BADGES & MILESTONES
             </h3>
             {badges.length === 0 ? (
-              <p className="text-xs text-[#8B8B8B]">Complete your first trip to earn your first badge!</p>
+              <p className="text-sm text-[#8B8B8B]">Complete your first trip to earn your first badge!</p>
             ) : (
               <div className="flex flex-wrap gap-3">
                 {badges.map((b) => (
-                  <span key={b._id} className="px-3 py-2 rounded-xl glass-inset text-xs font-medium text-[#2A2A2A] flex items-center gap-2">
-                    {b.icon} {b.title}
+                  <span key={b._id} className="px-4 py-2.5 rounded-full bg-[#FAFAFA] border border-gray-100 text-xs font-semibold text-[#1A1A1A] flex items-center gap-2 shadow-sm">
+                    <span className="text-lg">{b.icon}</span> {b.title}
                   </span>
                 ))}
               </div>
             )}
           </div>
+          
         </div>
       </div>
     </div>
