@@ -19,6 +19,7 @@ export default function Analytics() {
   const { formatAmount } = useCurrency();
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showOverview, setShowOverview] = useState(false);
 
   useEffect(() => {
     fetchAnalytics();
@@ -68,8 +69,6 @@ export default function Analytics() {
     percentage: totalDestinations > 0 ? Math.round((dest.count / totalDestinations) * 100) : 0
   }));
   if (topDestinations.length === 0) topDestinations.push({ name: 'None', count: 1, percentage: 100 });
-
-  const [showOverview, setShowOverview] = useState(false);
 
   return (
     <div className="space-y-6 animate-fade-in pb-10">
