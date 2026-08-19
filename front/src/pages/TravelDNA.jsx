@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Dna, RefreshCw, Loader2, Info, Landmark, Mountain, Palmtree, Utensils, Globe, Scale, Heart } from 'lucide-react';
-import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, Legend } from 'recharts';
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Legend } from 'recharts';
 import toast from 'react-hot-toast';
 import api from '../utils/axios';
 import { useAuth } from '../context/AuthContext';
@@ -109,10 +109,11 @@ export default function TravelDNA() {
           <div className="flex-1 min-h-[300px] w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
-                <PolarGrid stroke="#E5E5E7" strokeDasharray="3 3" />
+                <PolarGrid stroke="#CBD5E1" strokeWidth={1} />
                 <PolarAngleAxis dataKey="subject" tick={<CustomTick />} />
-                <Radar name="Average Traveler" dataKey="Average" stroke="#355E4B" fill="none" strokeDasharray="4 4" strokeWidth={2} />
-                <Radar name="You" dataKey="You" stroke="#D97706" fill="#FDE68A" fillOpacity={0.6} strokeWidth={2} />
+                <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: '#8B8B8B', fontSize: 10, fontWeight: 600 }} orientation="middle" tickCount={5} axisLine={false} />
+                <Radar name="Average Traveler" dataKey="Average" stroke="#355E4B" fill="none" strokeDasharray="4 4" strokeWidth={2.5} />
+                <Radar name="You" dataKey="You" stroke="#D97706" fill="#FDE68A" fillOpacity={0.6} strokeWidth={2.5} />
                 <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '12px', fontWeight: '600', color: '#2A2A2A' }} />
               </RadarChart>
             </ResponsiveContainer>
