@@ -154,7 +154,7 @@ export default function Analytics() {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Spending by Category */}
-          <div className="bg-white rounded-[32px] p-8 shadow-sm border border-gray-100 flex flex-col h-[420px]">
+          <div className="bg-white rounded-[32px] p-5 sm:p-8 shadow-sm border border-gray-100 flex flex-col h-[420px]">
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-bold text-[#1A1A1A]">Spending by Category</h3>
               <select className="bg-[#F5F7F2] text-[#8B8B8B] text-xs font-bold px-4 py-2 rounded-full border-none focus:ring-0 cursor-pointer appearance-none">
@@ -197,7 +197,7 @@ export default function Analytics() {
           </div>
 
           {/* Monthly Spending Trend */}
-          <div className="bg-white rounded-[32px] p-8 shadow-sm border border-gray-100 flex flex-col h-[320px]">
+          <div className="bg-white rounded-[32px] p-5 sm:p-8 shadow-sm border border-gray-100 flex flex-col h-[320px]">
              <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-[#1A1A1A]">Monthly Spending Trend</h3>
               <select className="bg-[#F5F7F2] text-[#8B8B8B] text-xs font-bold px-4 py-2 rounded-full border-none focus:ring-0 cursor-pointer appearance-none">
@@ -277,10 +277,10 @@ export default function Analytics() {
           </div>
 
           {/* Top Destinations */}
-          <div className="bg-white rounded-[32px] p-8 shadow-sm border border-gray-100">
-            <h3 className="font-bold text-[#1A1A1A] mb-6">Top Destinations</h3>
-            <div className="flex items-center gap-6">
-              <div className="w-[120px] h-[120px]">
+          <div className="bg-white rounded-[32px] p-6 sm:p-8 shadow-sm border border-gray-100">
+            <h3 className="font-bold text-[#1A1A1A] mb-6 text-center sm:text-left">Top Destinations</h3>
+            <div className="flex flex-col sm:flex-row items-center gap-6">
+              <div className="w-[120px] h-[120px] shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie data={topDestinations} innerRadius={40} outerRadius={60} paddingAngle={2} dataKey="count" stroke="none">
@@ -291,14 +291,14 @@ export default function Analytics() {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="flex-1 space-y-3">
+              <div className="flex-1 space-y-3 w-full">
                 {topDestinations.slice(0, 4).map((dest, i) => (
-                  <div key={dest.name} className="flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }} />
-                      <span className="font-semibold text-[#1A1A1A] truncate max-w-[80px]">{dest.name}</span>
+                  <div key={dest.name} className="flex items-center justify-between text-xs w-full">
+                    <div className="flex items-center gap-2 overflow-hidden pr-2">
+                      <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }} />
+                      <span className="font-semibold text-[#1A1A1A] truncate">{dest.name}</span>
                     </div>
-                    <span className="text-[#8B8B8B] font-medium">{dest.percentage}%</span>
+                    <span className="text-[#8B8B8B] font-medium shrink-0">{dest.percentage}%</span>
                   </div>
                 ))}
               </div>
