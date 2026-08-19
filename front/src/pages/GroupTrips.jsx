@@ -295,9 +295,9 @@ export default function GroupTrips() {
       {openGroup && (
         <div className="fixed inset-0 bg-white/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-card w-full max-w-lg p-6 space-y-4 max-h-[85vh] overflow-y-auto">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-[#2A2A2A]">{getTripDisplayName(openGroup.trip)}</h3>
-              <button onClick={() => setOpenGroup(null)} className="text-[#8B8B8B] hover:text-[#2A2A2A]">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-sm font-bold text-[#2A2A2A] flex-1 min-w-0 truncate">{getTripDisplayName(openGroup.trip)}</h3>
+              <button onClick={() => setOpenGroup(null)} className="text-[#8B8B8B] hover:text-[#2A2A2A] shrink-0 p-1">
                 <X className="w-4 h-4" />
               </button>
             </div>

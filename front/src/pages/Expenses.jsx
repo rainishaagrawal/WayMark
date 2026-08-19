@@ -169,7 +169,7 @@ export default function Expenses() {
         </div>
 
         {/* Right Side */}
-        <div className="relative z-10 flex items-end gap-4 w-full md:w-auto mt-2 md:mt-0">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-end gap-4 w-full md:w-auto mt-2 md:mt-0">
           <div className="flex flex-col w-full sm:w-auto">
             <label className="text-[10px] text-[#8B8B8B] uppercase font-bold mb-1.5 px-1">Select Active Trip</label>
             <div className="relative">
@@ -370,8 +370,8 @@ export default function Expenses() {
                       ) : (
                         m.expenses.map((exp) => (
                           <div key={exp._id} className="p-4 rounded-[16px] bg-[#F9FBF8] border border-[#E5E5E7]/50 flex items-center justify-between gap-3 shadow-sm hover:border-[#D4AF37]/30 transition-colors">
-                            <div>
-                              <h4 className="text-sm font-bold text-[#1A1A1A]">{exp.description || exp.category}</h4>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-sm font-bold text-[#1A1A1A] truncate">{exp.description || exp.category}</h4>
                               <p className="text-xs text-[#8B8B8B] capitalize mt-1">
                                 {exp.category} • {new Date(exp.date).toLocaleDateString()}
                               </p>
@@ -412,8 +412,8 @@ export default function Expenses() {
                     <div className="w-9 h-9 rounded-xl bg-[#D4AF37]/15 border border-[#D4AF37]/30 flex items-center justify-center text-[#D4AF37] shrink-0">
                       <DollarSign className="w-4 h-4" />
                     </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-[#2A2A2A]">{exp.description || exp.category}</h4>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-xs font-bold text-[#2A2A2A] truncate">{exp.description || exp.category}</h4>
                       <p className="text-[10px] text-[#8B8B8B] capitalize">
                         {exp.category} • {new Date(exp.date).toLocaleDateString()}
                         {exp.paidBy && (
@@ -470,9 +470,9 @@ export default function Expenses() {
       {showAddModal && (
         <div className="fixed inset-0 bg-white/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-card w-full max-w-md p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-[#2A2A2A]">Log Expense for {getTripDisplayName(selectedTrip)}</h3>
-              <button onClick={() => setShowAddModal(false)} className="text-[#8B8B8B] hover:text-[#2A2A2A]">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-sm font-bold text-[#2A2A2A] flex-1 min-w-0 truncate">Log Expense for {getTripDisplayName(selectedTrip)}</h3>
+              <button onClick={() => setShowAddModal(false)} className="text-[#8B8B8B] hover:text-[#2A2A2A] shrink-0 p-1">
                 <X className="w-4 h-4" />
               </button>
             </div>
