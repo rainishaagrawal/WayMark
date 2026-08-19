@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+﻿import React, { useState, useEffect, useMemo } from 'react';
 import { Loader2, TrendingUp, Plane, MapPin as Globe, Briefcase, CheckCircle2, ChevronRight, Activity } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, CartesianGrid } from 'recharts';
 import api from '../utils/axios';
@@ -118,11 +118,11 @@ export default function Analytics() {
                 <BarChart data={categoryData} barSize={24}>
                   <CartesianGrid vertical={false} stroke="#F3F4F6" />
                   <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} dy={10} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} tickFormatter={(val) => val >= 1000 ? \\K\ : val} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(1)}K` : val} />
                   <Tooltip cursor={{ fill: '#F3F4F6' }} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }} />
                   <Bar dataKey="amount" radius={[6, 6, 6, 6]}>
                     {categoryData.map((entry, index) => (
-                      <Cell key={\cell-\\} fill={COLORS[entry.key] || COLORS.miscellaneous} />
+                      <Cell key={`cell-${index}`} fill={COLORS[entry.key] || COLORS.miscellaneous} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -160,7 +160,7 @@ export default function Analytics() {
                 <LineChart data={monthlyData}>
                   <CartesianGrid vertical={false} stroke="#F3F4F6" strokeDasharray="4 4" />
                   <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} dy={10} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} tickFormatter={(val) => val >= 1000 ? \\K\ : val} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}K` : val} />
                   <Tooltip 
                     cursor={{ stroke: '#60A5FA', strokeWidth: 1, strokeDasharray: '4 4' }} 
                     contentStyle={{ borderRadius: '16px', border: 'none', backgroundColor: '#1A1A1A', color: 'white' }} 
@@ -236,7 +236,7 @@ export default function Analytics() {
                   <PieChart>
                     <Pie data={topDestinations} innerRadius={40} outerRadius={60} paddingAngle={2} dataKey="count" stroke="none">
                       {topDestinations.map((entry, index) => (
-                        <Cell key={\cell-\\} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                        <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                       ))}
                     </Pie>
                   </PieChart>
