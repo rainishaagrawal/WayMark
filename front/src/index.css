@@ -1,0 +1,123 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer base {
+  body {
+    background-color: #F5F7F2;
+    color: #2A2A2A;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+}
+
+/* Custom Sleek Ultra-Thin Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E5E5E7;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #E5E5E7 transparent;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ============ Premium Travel App — Flat Light System (Option 1) ============ */
+
+/* Primary elevated surface — sidebar, navbar, popover panels */
+.glass-panel {
+  background: #FFFFFF;
+  border: 1px solid rgba(229, 229, 231, 0.6);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+}
+
+/* Standard content card (formerly glass, now flat solid white) */
+.glass-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(229, 229, 231, 0.6);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  border-radius: 24px;
+  position: relative;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(212, 175, 55, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+/* Nested / secondary surface (list rows, inputs, chips) */
+.glass-inset {
+  background: #F5F7F2;
+  border: 1px solid rgba(229, 229, 231, 0.5);
+  border-radius: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.glass-inset:hover {
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+/* Specular highlight sheen - disabled for flat design but kept class for compatibility */
+.glass-sheen {
+  position: relative;
+}
+
+/* Amber glow for CTA buttons */
+.glow-gold {
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
+}
+
+/* Muted Forest card variant — used for editorial/category highlight cards */
+.glass-forest {
+  background: #EAF5EA;
+  border: 1px solid rgba(53, 94, 75, 0.15);
+  border-radius: 24px;
+  color: #0F2B24;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.glass-forest:hover {
+  border-color: rgba(53, 94, 75, 0.3);
+  box-shadow: 0 4px 12px rgba(53, 94, 75, 0.08);
+}
+
+/* Soft ambient blurred orbs for background depth */
+.ambient-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle divider */
+.divider {
+  height: 1px;
+  background: #E5E5E7;
+}
