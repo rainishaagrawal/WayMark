@@ -1,10 +1,10 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
-import { Search, Bell, Sparkles, User, LogOut, Settings, Check } from 'lucide-react';
+import { Search, Bell, Sparkles, User, LogOut, Settings, Check, Menu } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTrips } from '../context/TripContext';
 import { useNavigate } from 'react-router-dom';
 
-export default function Navbar() {
+export default function Navbar({ onMenuClick }) {
   const { user, logout } = useAuth();
   const { notifications, markNotificationAsRead, markAllNotificationsAsRead } = useTrips();
   const navigate = useNavigate();
@@ -36,9 +36,14 @@ export default function Navbar() {
   };
 
   return (
-    <header className="h-20 bg-transparent sticky top-0 z-20 px-8 flex items-center justify-between ml-72">
+    <header className="h-20 bg-transparent sticky top-0 z-20 px-4 md:px-8 flex items-center justify-between md:ml-72 bg-white/80 backdrop-blur-md md:bg-transparent">
+      {/* Mobile Menu Toggle */}
+      <button onClick={onMenuClick} className="md:hidden p-2 -ml-2 text-gray-600 hover:text-black">
+        <Menu className="w-6 h-6" />
+      </button>
+
       {/* Global Search Bar */}
-      <div className="flex items-center gap-3 w-[450px]">
+      <div className="hidden md:flex items-center gap-3 w-[450px]">
         <form onSubmit={handleSearchSubmit} className="relative w-full">
           <Search className="w-4 h-4 text-[#8B8B8B] absolute left-4 top-1/2 -translate-y-1/2" />
           <input
@@ -56,11 +61,11 @@ export default function Navbar() {
       </div>
 
       {/* Right Controls */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4 ml-auto">
         {/* Quick AI Planner Button */}
         <button
           onClick={() => navigate('/planner')}
-          className="flex items-center gap-2 bg-[#0F2B24] hover:bg-[#0A1F1A] text-white font-medium text-xs px-5 py-2.5 rounded-full transition-all shadow-md"
+          className="hidden md:flex items-center gap-2 bg-[#0F2B24] hover:bg-[#0A1F1A] text-white font-medium text-xs px-5 py-2.5 rounded-full transition-all shadow-md"
         >
           <Sparkles className="w-3.5 h-3.5" />
           <span>Plan with AI</span>
@@ -73,16 +78,16 @@ export default function Navbar() {
               setShowNotifMenu(!showNotifMenu);
               setShowProfileMenu(false);
             }}
-            className="w-10 h-10 rounded-full bg-white border border-[#E5E5E7]/50 flex items-center justify-center text-[#2A2A2A] hover:bg-black/[0.02] transition-colors relative shadow-sm"
+            className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white border border-[#E5E5E7]/50 flex items-center justify-center text-[#2A2A2A] hover:bg-black/[0.02] transition-colors relative shadow-sm"
           >
             <Bell className="w-4 h-4" />
             {unreadCount > 0 && (
-              <span className="w-2.5 h-2.5 bg-[#EF4444] border-2 border-white rounded-full absolute top-2 right-2" />
+              <span className="w-2.5 h-2.5 bg-[#EF4444] border-2 border-white rounded-full absolute top-1.5 md:top-2 right-1.5 md:right-2" />
             )}
           </button>
 
           {showNotifMenu && (
-            <div className="absolute right-0 mt-2 w-80 bg-white border border-[#E5E5E7]/50 rounded-2xl p-4 shadow-2xl z-50 animate-fade-in">
+            <div className="absolute right-0 mt-2 w-72 md:w-80 bg-white border border-[#E5E5E7]/50 rounded-2xl p-4 shadow-2xl z-50 animate-fade-in">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-3">
                 <h4 className="text-[11px] font-bold text-[#1A1A1A] uppercase tracking-wider">Notifications</h4>
                 <div className="flex items-center gap-2">
@@ -142,13 +147,13 @@ export default function Navbar() {
               setShowProfileMenu(!showProfileMenu);
               setShowNotifMenu(false);
             }}
-            className="w-10 h-10 rounded-full bg-white border border-[#E5E5E7]/50 overflow-hidden shadow-sm hover:border-gray-300 transition-all focus:outline-none"
+            className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white border border-[#E5E5E7]/50 overflow-hidden shadow-sm hover:border-gray-300 transition-all focus:outline-none"
           >
             {user?.avatar ? (
               <img src={user.avatar} alt="Profile" className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full bg-[#FAFAFA] flex items-center justify-center text-[#8B8B8B]">
-                <User className="w-5 h-5" />
+                <User className="w-4 h-4 md:w-5 md:h-5" />
               </div>
             )}
           </button>
