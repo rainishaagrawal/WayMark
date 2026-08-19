@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Loader2, TrendingUp, Plane, MapPin as Globe, Briefcase, CheckCircle2, ChevronRight, Activity } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, CartesianGrid } from 'recharts';
 import api from '../utils/axios';
@@ -69,6 +69,8 @@ export default function Analytics() {
   }));
   if (topDestinations.length === 0) topDestinations.push({ name: 'None', count: 1, percentage: 100 });
 
+  const [showOverview, setShowOverview] = useState(false);
+
   return (
     <div className="space-y-6 animate-fade-in pb-10">
       
@@ -92,12 +94,60 @@ export default function Analytics() {
             </div>
           </div>
           
-          <button className="flex items-center gap-2 bg-[#F5F7F2] hover:bg-[#E5E5E7] text-[#60A5FA] font-bold text-xs px-5 py-2.5 rounded-full shadow-sm transition-all shrink-0">
+          <button 
+            onClick={() => setShowOverview(true)}
+            className="flex items-center gap-2 bg-[#F5F7F2] hover:bg-[#E5E5E7] text-[#60A5FA] font-bold text-xs px-5 py-2.5 rounded-full shadow-sm transition-all shrink-0">
             <Plane className="w-4 h-4" />
             <span>2024 Overview</span>
           </button>
         </div>
       </div>
+
+      {showOverview && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in" onClick={() => setShowOverview(false)}>
+          <div className="bg-white rounded-[32px] p-8 max-w-md w-full shadow-2xl relative" onClick={e => e.stopPropagation()}>
+            <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-[#60A5FA] rounded-full border-4 border-white flex items-center justify-center">
+              <Plane className="w-8 h-8 text-white" />
+            </div>
+            <div className="text-center mt-10 mb-6">
+              <h2 className="text-2xl font-bold text-[#1A1A1A]">2024 Year in Review</h2>
+              <p className="text-[#8B8B8B] text-sm mt-1">Here is how you travelled this year!</p>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="bg-[#FAFAFA] p-4 rounded-[20px] flex justify-between items-center border border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-[#EBF5FF] rounded-xl"><Globe className="w-5 h-5 text-[#60A5FA]" /></div>
+                  <span className="font-semibold text-sm">Countries Visited</span>
+                </div>
+                <span className="font-bold text-lg text-[#1A1A1A]">{analytics?.countriesVisited?.length || 0}</span>
+              </div>
+              
+              <div className="bg-[#FAFAFA] p-4 rounded-[20px] flex justify-between items-center border border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-emerald-50 rounded-xl"><Briefcase className="w-5 h-5 text-emerald-500" /></div>
+                  <span className="font-semibold text-sm">Trips Taken</span>
+                </div>
+                <span className="font-bold text-lg text-[#1A1A1A]">{analytics?.totalTripsCount || 0}</span>
+              </div>
+
+              <div className="bg-[#FAFAFA] p-4 rounded-[20px] flex justify-between items-center border border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-amber-50 rounded-xl"><Activity className="w-5 h-5 text-amber-500" /></div>
+                  <span className="font-semibold text-sm">Total Spending</span>
+                </div>
+                <span className="font-bold text-lg text-[#1A1A1A]">{formatAmount(analytics?.totalExpensesAmount || 0)}</span>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => setShowOverview(false)}
+              className="mt-8 w-full bg-[#1A1A1A] hover:bg-black text-white font-bold py-3.5 rounded-full transition-colors">
+              Close Overview
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
