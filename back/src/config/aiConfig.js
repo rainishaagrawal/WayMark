@@ -3,7 +3,7 @@ import axios from "axios";
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "MOCK_GEMINI_KEY";
 const GROQ_API_KEY = process.env.GROQ_API_KEY || "MOCK_GROQ_KEY";
 
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${GEMINI_API_KEY}`;
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 export const callGeminiAPI = async (prompt, systemInstruction = "", imageData = null) => {
