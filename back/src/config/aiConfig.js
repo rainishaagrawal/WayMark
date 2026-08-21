@@ -36,9 +36,15 @@ export const callGeminiAPI = async (prompt, systemInstruction = "", imageData = 
       { headers: { "Content-Type": "application/json" } }
     );
 
-    const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    let text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!text) throw new Error("Empty response from Gemini API");
-    return JSON.parse(text);
+    text = text.replace(/```json/gi, "").replace(/```/g, "").trim();
+    try {
+      return JSON.parse(text);
+    } catch (parseErr) {
+      console.warn("JSON Parse Failed for text:", text);
+      throw parseErr;
+    }
   } catch (error) {
     console.warn("⚠️ Gemini API call failed or unparseable, attempting Groq fallback:", error.message);
     if (error.response?.data) {
