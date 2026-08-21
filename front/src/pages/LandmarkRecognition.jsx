@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Camera, Upload, Sparkles, MapPin, Loader2, Search, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/axios';
