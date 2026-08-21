@@ -6,17 +6,26 @@ const GROQ_API_KEY = process.env.GROQ_API_KEY || "MOCK_GROQ_KEY";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
-export const callGeminiAPI = async (prompt, systemInstruction = "") => {
+export const callGeminiAPI = async (prompt, systemInstruction = "", imageData = null) => {
   try {
+    const parts = [];
+    if (systemInstruction) parts.push({ text: systemInstruction });
+    if (imageData) {
+      parts.push({
+        inlineData: {
+          mimeType: imageData.mimeType,
+          data: imageData.data
+        }
+      });
+    }
+    parts.push({ text: prompt });
+
     const response = await axios.post(
       GEMINI_URL,
       {
         contents: [
           {
-            parts: [
-              ...(systemInstruction ? [{ text: systemInstruction }] : []),
-              { text: prompt },
-            ],
+            parts: parts,
           },
         ],
         generationConfig: {
@@ -68,11 +77,12 @@ export const callGroqAPI = async (prompt, systemInstruction = "") => {
   }
 };
 
-export const executeAiPrompt = async (prompt, systemInstruction = "", mockFallback = {}) => {
+export const executeAiPrompt = async (prompt, systemInstruction = "", mockFallback = {}, imageData = null) => {
   try {
-    return await callGeminiAPI(prompt, systemInstruction);
+    return await callGeminiAPI(prompt, systemInstruction, imageData);
   } catch (geminiError) {
     try {
+      if (imageData) throw new Error("Groq fallback not configured for vision");
       return await callGroqAPI(prompt, systemInstruction);
     } catch (groqError) {
       console.error("💥 All AI Services failed. Returning intelligent mock fallback.");

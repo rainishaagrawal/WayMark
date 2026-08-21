@@ -15,7 +15,12 @@ export const detectLandmarkFromImage = async (fileBuffer, mimeType = "image/jpeg
     architecturalStyle: "Wrought-iron lattice tower",
   };
 
-  const detectionResult = await executeAiPrompt(prompt, "You are a Vision AI for Landmark Detection.", mockFallback);
+  const imageData = {
+    mimeType: mimeType,
+    data: fileBuffer.toString("base64")
+  };
+
+  const detectionResult = await executeAiPrompt(prompt, "You are a Vision AI for Landmark Detection.", mockFallback, imageData);
 
   let nearbyPois = null;
   try {
