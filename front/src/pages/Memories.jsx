@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Camera, Plus, Loader2, Trash2, Share2, X, Upload, Search, Pencil, MapPin, Calendar, Bookmark } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/axios';
@@ -487,7 +487,15 @@ export default function Memories() {
           </div>
         </div>
       )}
+
+      {editMemory && (
+        <EditMemoryModal
+          memory={editMemory}
+          trips={trips}
+          onClose={() => setEditMemory(null)}
+          onSave={() => fetchMemories()}
+        />
+      )}
     </div>
   );
 }
-
