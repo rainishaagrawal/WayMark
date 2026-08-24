@@ -121,17 +121,37 @@ export const getTripExpenses = async (tripId) => {
   }
 
   const memberCount = members.length || 1;
-  const perMemberShare = Math.round((totalSpent / memberCount) * 100) / 100;
+  const averageShare = Math.round((totalSpent / memberCount) * 100) / 100;
+
+  // Fetch all custom splits for these expenses
+  const expenseIds = expenses.map(e => e._id);
+  const splits = await ExpenseSplit.find({ expense: { $in: expenseIds } });
 
   // Group expenses by member
   const memberExpenses = members.map((member) => {
     const userExpenses = expenses.filter((e) => e.paidBy && e.paidBy._id.toString() === member._id.toString());
     const totalPaid = userExpenses.reduce((sum, e) => sum + e.amount, 0);
-    const netBalance = Math.round((totalPaid - perMemberShare) * 100) / 100;
+    
+    let totalShare = 0;
+    expenses.forEach(e => {
+        const customSplits = splits.filter(s => s.expense.toString() === e._id.toString());
+        if (customSplits.length > 0) {
+            const memberSplit = customSplits.find(s => s.user.toString() === member._id.toString());
+            if (memberSplit) {
+                totalShare += memberSplit.splitAmount;
+            }
+        } else {
+            totalShare += (e.amount / memberCount);
+        }
+    });
+    
+    totalShare = Math.round(totalShare * 100) / 100;
+    const netBalance = Math.round((totalPaid - totalShare) * 100) / 100;
+    
     return {
       user: member,
       totalPaid,
-      shareAmount: perMemberShare,
+      shareAmount: totalShare,
       netBalance, // >0: gets back money, <0: owes money, ==0: settled
       expenses: userExpenses,
     };
@@ -173,7 +193,7 @@ export const getTripExpenses = async (tripId) => {
     members,
     totalSpent,
     memberCount,
-    perMemberShare,
+    perMemberShare: averageShare,
     memberBalances: memberExpenses,
     settlements,
     categoryBreakdown,

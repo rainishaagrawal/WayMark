@@ -39,6 +39,8 @@ export default function Expenses() {
   const [description, setDescription] = useState('');
   const [paidByUserId, setPaidByUserId] = useState('');
   const [saving, setSaving] = useState(false);
+  const [splitByPercentage, setSplitByPercentage] = useState(false);
+  const [memberPercentages, setMemberPercentages] = useState({});
 
   useEffect(() => {
     if (!selectedTripId && trips.length > 0) {
@@ -95,19 +97,48 @@ export default function Expenses() {
       toast.error('Please enter a valid amount');
       return;
     }
+
+    if (splitByPercentage) {
+      let totalPerc = 0;
+      groupMembers.forEach(m => {
+         totalPerc += parseFloat(memberPercentages[m._id] || 0);
+      });
+      if (Math.abs(totalPerc - 100) > 0.1) {
+         toast.error(`Percentages must add up to 100%. Currently at ${totalPerc}%`);
+         return;
+      }
+    }
+
     setSaving(true);
     try {
-      await api.post('/expenses', {
+      const expRes = await api.post('/expenses', {
         tripId: selectedTripId,
         amount: parseFloat(amount),
         category,
         description,
         paidBy: paidByUserId || user?._id,
       });
+      
+      const newExp = expRes.data.data;
+      
+      if (splitByPercentage && newExp) {
+        const splits = groupMembers.map(m => {
+           const perc = parseFloat(memberPercentages[m._id] || 0);
+           const splitAmount = (parseFloat(amount) * perc) / 100;
+           return { user: m._id, splitAmount };
+        });
+        await api.post('/expenses/split', {
+           expenseId: newExp._id,
+           splits
+        });
+      }
+
       toast.success('Expense logged successfully!');
       setShowAddModal(false);
       setAmount('');
       setDescription('');
+      setSplitByPercentage(false);
+      setMemberPercentages({});
       fetchExpenses();
     } catch (e) {
       toast.error(e.message || 'Failed to add expense');
@@ -558,6 +589,56 @@ export default function Expenses() {
                   placeholder="e.g. Dinner bill or Hotel booking"
                 />
               </div>
+
+              {groupMembers.length > 1 && (
+                <div className="pt-2">
+                  <label className="flex items-center gap-2 cursor-pointer mb-3">
+                    <input 
+                      type="checkbox" 
+                      checked={splitByPercentage}
+                      onChange={(e) => {
+                        setSplitByPercentage(e.target.checked);
+                        if (e.target.checked && Object.keys(memberPercentages).length === 0) {
+                           const equalPerc = (100 / groupMembers.length).toFixed(1);
+                           const initial = {};
+                           groupMembers.forEach(m => initial[m._id] = equalPerc);
+                           setMemberPercentages(initial);
+                        }
+                      }}
+                      className="w-4 h-4 rounded border-[#E5E5E7] text-[#D4AF37] focus:ring-[#D4AF37]"
+                    />
+                    <span className="text-[#2A2A2A] font-bold">Split unequally (by percentage)</span>
+                  </label>
+                  
+                  {splitByPercentage && (
+                    <div className="space-y-3 p-4 bg-[#F9FBF8] rounded-xl border border-[#E5E5E7]/50">
+                      <div className="flex justify-between items-center text-[10px] text-[#8B8B8B] font-bold uppercase mb-1">
+                        <span>Member</span>
+                        <span>Percentage (%)</span>
+                      </div>
+                      {groupMembers.map(m => (
+                        <div key={m._id} className="flex items-center justify-between gap-3">
+                          <span className="text-sm font-semibold text-[#1A1A1A] truncate flex-1">
+                            {m.name} {m._id === user?._id ? '(You)' : ''}
+                          </span>
+                          <input
+                            type="number"
+                            step="0.1"
+                            min="0"
+                            max="100"
+                            value={memberPercentages[m._id] || ''}
+                            onChange={(e) => setMemberPercentages({...memberPercentages, [m._id]: e.target.value})}
+                            className="w-20 glass-inset text-[#2A2A2A] p-1.5 rounded-lg focus:outline-none text-right font-bold"
+                          />
+                        </div>
+                      ))}
+                      <div className="text-right text-[10px] text-[#8B8B8B] font-bold mt-2 pt-2 border-t border-[#E5E5E7]">
+                        Total: {Object.values(memberPercentages).reduce((sum, val) => sum + (parseFloat(val) || 0), 0).toFixed(1)}%
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <button
                 type="submit"
