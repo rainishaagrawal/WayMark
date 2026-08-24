@@ -87,11 +87,6 @@ export default function TravelJourneyBanner({
                     alt={trip.landmark || trip.destinationName} 
                     className="w-20 md:w-28 h-auto object-contain mix-blend-multiply"
                     style={{ filter: "contrast(1.2) brightness(1.1)" }}
-                    onError={(e) => { 
-                      e.target.onerror = null; 
-                      e.target.src = "/profile-sticker.png"; 
-                      e.target.style.filter = "none";
-                    }}
                   />
                   {/* Location Tag */}
                   <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white/95 px-2 py-0.5 rounded-full text-[9px] font-black text-[#2A2A2A] shadow-sm whitespace-nowrap tracking-tight uppercase">
