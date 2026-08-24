@@ -17,7 +17,7 @@ export default function TravelJourneyBanner({
   const constraintsRef = useRef(null);
   
   return (
-    <div ref={constraintsRef} className="relative h-64 rounded-[32px] overflow-hidden shadow-sm bg-[#F9F6F0] flex items-end p-6 md:p-10 border border-[#E5E5E7]/50">
+    <div ref={constraintsRef} className="relative h-80 md:h-96 rounded-[32px] overflow-hidden shadow-sm bg-[#F9F6F0] flex items-end p-6 md:p-10 border border-[#E5E5E7]/50">
       
       {/* Background Stickers Area */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -58,7 +58,7 @@ export default function TravelJourneyBanner({
                   <img 
                     src={trip.stickerUrl} 
                     alt={trip.landmark || trip.destinationName} 
-                    className="w-28 md:w-36 h-auto object-contain mix-blend-multiply"
+                    className="w-32 md:w-40 h-auto object-contain mix-blend-multiply"
                     onError={(e) => { e.target.style.display = "none" }}
                   />
                   {/* Location Tag */}
