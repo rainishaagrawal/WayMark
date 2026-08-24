@@ -18,7 +18,7 @@ export default function TravelJourneyBanner({
   
   const [positions, setPositions] = useState(() => {
     try {
-      const saved = localStorage.getItem("sticker_pos");
+      const saved = localStorage.getItem("sticker_positions_v2");
       return saved ? JSON.parse(saved) : {};
     } catch (e) {
       return {};
@@ -29,7 +29,7 @@ export default function TravelJourneyBanner({
     setPositions(prev => {
       const p = prev[id] || { x: 0, y: 0 };
       const newPos = { ...prev, [id]: { x: p.x + info.offset.x, y: p.y + info.offset.y } };
-      localStorage.setItem("sticker_pos", JSON.stringify(newPos));
+      localStorage.setItem("sticker_positions_v2", JSON.stringify(newPos));
       return newPos;
     });
   };
