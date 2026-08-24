@@ -27,6 +27,7 @@ export default function TravelJourneyBanner({
           src="/profile-sticker.png" 
           alt="Vintage Travel Elements"
           drag
+          dragMomentum={false}
           dragConstraints={constraintsRef}
           whileDrag={{ scale: 1.05, zIndex: 100 }}
           className="absolute bottom-4 right-8 w-40 md:w-56 h-auto object-contain opacity-95 mix-blend-multiply pointer-events-auto cursor-grab active:cursor-grabbing z-0"
@@ -44,14 +45,15 @@ export default function TravelJourneyBanner({
               return (
                 <motion.div
                   key={trip._id}
-                  initial={{ opacity: 0, scale: 0.5, y: 20 }}
-                  animate={{ opacity: 0.95, scale: 1, y: 0 }}
+                  initial={{ opacity: 0, scale: 0.5, y: 20, rotate }}
+                  animate={{ opacity: 0.95, scale: 1, y: 0, rotate }}
                   transition={{ duration: 0.6, type: "spring" }}
                   drag
+                  dragMomentum={false}
                   dragConstraints={constraintsRef}
                   whileDrag={{ scale: 1.1, zIndex: 100 }}
-                  className="relative mix-blend-multiply drop-shadow-sm -ml-8 hover:z-50 transition-transform pointer-events-auto cursor-grab active:cursor-grabbing"
-                  style={{ transform: `rotate(${rotate}deg)`, zIndex }}
+                  className="relative mix-blend-multiply drop-shadow-sm -ml-8 hover:z-50 pointer-events-auto cursor-grab active:cursor-grabbing"
+                  style={{ zIndex }}
                 >
                   <img 
                     src={trip.stickerUrl} 

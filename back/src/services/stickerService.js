@@ -30,7 +30,7 @@ export const generateDestinationSticker = async (destinationName) => {
     return existingSticker;
   }
 
-  const imagePrompt = `Cute hand-drawn watercolor travel scrapbook sticker of ${landmark} ${country}. White sticker outline, solid pure white background, playful travel journal style, isolated on white background`;
+  const imagePrompt = `A die-cut travel sticker for ${country} featuring ${landmark} and the national flag of ${country}. The word "${country}" is written at the top in a cute handwritten font. Thick white border around the entire sticker. Solid pure white background. Flat vector illustration style, bright colors, isolated on white`;
   const encodedPrompt = encodeURIComponent(imagePrompt);
   
   const seed = Math.floor(Math.random() * 1000000);
