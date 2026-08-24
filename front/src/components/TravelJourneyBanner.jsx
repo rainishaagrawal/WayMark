@@ -85,8 +85,7 @@ export default function TravelJourneyBanner({
                   <img 
                     src={trip.stickerUrl} 
                     alt={trip.landmark || trip.destinationName} 
-                    className="w-20 md:w-28 h-auto object-contain mix-blend-multiply"
-                    style={{ filter: "contrast(1.2) brightness(1.1)" }}
+                    className="w-20 md:w-28 h-auto object-contain drop-shadow-sm"
                   />
                   {/* Location Tag */}
                   <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white/95 px-2 py-0.5 rounded-full text-[9px] font-black text-[#2A2A2A] shadow-sm whitespace-nowrap tracking-tight uppercase">

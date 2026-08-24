@@ -35,13 +35,41 @@ export const generateDestinationSticker = async (destinationName) => {
   const encodedPrompt = encodeURIComponent(imagePrompt);
   
   const seed = Math.floor(Math.random() * 1000000);
-  const stickerUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&seed=${seed}`;
+  const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&seed=${seed}`;
+
+  let finalStickerUrl = pollinationsUrl;
+  
+  try {
+    const fs = (await import("fs")).default;
+    const path = (await import("path")).default;
+
+    console.log("Removing background for:", destinationName);
+    const bgResponse = await fetch("http://localhost:3001/remove-background-url", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ imageUrl: pollinationsUrl })
+    });
+    
+    if (bgResponse.ok) {
+      const arrayBuffer = await bgResponse.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const filename = `sticker_${Date.now()}_${Math.floor(Math.random()*1000)}.png`;
+      const filepath = path.join(process.cwd(), "..", "front", "public", "stickers", filename);
+      fs.writeFileSync(filepath, buffer);
+      finalStickerUrl = `/stickers/${filename}`;
+      console.log("Background removed and saved:", finalStickerUrl);
+    } else {
+      console.warn("Background removal failed, falling back to original URL");
+    }
+  } catch (err) {
+    console.error("Error calling bg-remove-api:", err.message);
+  }
 
   const newSticker = new DestinationSticker({
     destination: destinationName,
     country,
     landmark,
-    stickerUrl
+    stickerUrl: finalStickerUrl
   });
   
   await newSticker.save();
