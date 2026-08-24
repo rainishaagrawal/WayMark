@@ -79,6 +79,9 @@ export const callGroqAPI = async (prompt, systemInstruction = "") => {
     return JSON.parse(content);
   } catch (error) {
     console.error("❌ Groq API call failed:", error.message);
+    if (error.response && error.response.data) {
+        console.error("Groq Error Data:", JSON.stringify(error.response.data, null, 2));
+    }
     throw error;
   }
 };

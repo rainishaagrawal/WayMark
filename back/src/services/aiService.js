@@ -128,7 +128,12 @@ export const generateTripItinerary = async (userId, tripData) => {
   });
 
   const createdTripDays = [];
-  const daysArray = Array.isArray(aiResult.days) ? aiResult.days : [];
+  let daysArray = [];
+  if (Array.isArray(aiResult)) {
+    daysArray = aiResult;
+  } else if (Array.isArray(aiResult.days)) {
+    daysArray = aiResult.days;
+  }
   for (let i = 0; i < daysArray.length; i++) {
     const day = daysArray[i];
     const dNum = day.dayNumber || (i + 1);
@@ -178,7 +183,9 @@ export const generateTripItinerary = async (userId, tripData) => {
     });
   } catch (e) {}
 
-  return { trip, itinerary: aiResult, weather: weatherInfo };
+  const standardizedItinerary = Array.isArray(aiResult) ? { days: aiResult } : aiResult;
+
+  return { trip, itinerary: standardizedItinerary, weather: weatherInfo };
 };
 
 /**
