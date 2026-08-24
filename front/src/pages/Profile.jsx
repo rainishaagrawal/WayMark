@@ -69,21 +69,21 @@ export default function Profile() {
       
       {/* Header Banner */}
       <div 
-        className="relative h-64 rounded-[32px] overflow-hidden shadow-sm bg-[#2A2A2A] flex items-end p-6 md:p-10"
-        style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 40%'
-        }}
+        className="relative h-64 rounded-[32px] overflow-hidden shadow-sm bg-[#F9F6F0] flex items-end p-6 md:p-10 border border-[#E5E5E7]/50"
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        {/* Background Sticker */}
+        <img 
+          src="/profile-sticker.png" 
+          alt="Vintage Travel Elements"
+          className="absolute bottom-4 right-8 w-64 md:w-80 h-auto object-contain opacity-95 mix-blend-multiply pointer-events-none"
+        />
         
         <div className="relative z-10 w-full flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
           <div className="flex items-center gap-6">
             <div className="relative">
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="w-24 h-24 rounded-[28px] border-4 border-amber-400 overflow-hidden bg-white flex items-center justify-center relative group shadow-xl"
+                className="w-24 h-24 rounded-[28px] border-4 border-amber-400 overflow-hidden bg-white flex items-center justify-center relative group shadow-xl z-20"
               >
                 {user?.avatar ? (
                   <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
@@ -99,15 +99,15 @@ export default function Profile() {
             
             <div className="pb-2">
               <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold text-white tracking-tight">{user?.name}</h1>
+                <h1 className="text-3xl font-bold text-[#2A2A2A] tracking-tight drop-shadow-sm">{user?.name}</h1>
                 {completedTrips > 0 && (
-                  <span className="px-3 py-1 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-400/30">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200 shadow-sm">
                     {completedTrips} TRIPS COMPLETED
                   </span>
                 )}
               </div>
-              <p className="text-sm text-gray-300 flex items-center gap-1.5 mt-2 font-medium">
-                <MapPin className="w-4 h-4 text-amber-400" /> {trips.length} trips planned
+              <p className="text-sm text-[#5A5A5A] flex items-center gap-1.5 mt-2 font-medium">
+                <MapPin className="w-4 h-4 text-amber-500" /> {trips.length} trips planned
               </p>
             </div>
           </div>
@@ -115,7 +115,7 @@ export default function Profile() {
           <button
             onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
             disabled={saving}
-            className="bg-[#2A2A2A] hover:bg-black text-white font-semibold text-xs px-5 py-2.5 rounded-full transition-colors flex items-center gap-2 disabled:opacity-60 mb-2 border border-white/10 shadow-lg"
+            className="bg-[#2A2A2A] hover:bg-black text-white font-semibold text-xs px-5 py-2.5 rounded-full transition-colors flex items-center gap-2 disabled:opacity-60 mb-2 shadow-lg z-20"
           >
             {isEditing ? <Check className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
             <span>{saving ? 'Saving...' : isEditing ? 'Save Changes' : 'Edit Passport'}</span>
