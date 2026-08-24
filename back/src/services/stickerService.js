@@ -21,8 +21,7 @@ export const generateDestinationSticker = async (destinationName) => {
   
   try {
     const aiResponse = await callGeminiAPI(prompt, "You are a geography AI.");
-    const cleaned = aiResponse.replace(/```json/g, "").replace(/```/g, "").trim();
-    const data = JSON.parse(cleaned);
+    const data = typeof aiResponse === 'string' ? JSON.parse(aiResponse.replace(/```json/g, "").replace(/```/g, "").trim()) : aiResponse;
     country = data.country || "Unknown";
     landmark = data.landmark || destinationName;
   } catch (err) {
