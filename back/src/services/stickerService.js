@@ -42,27 +42,41 @@ export const generateDestinationSticker = async (destinationName) => {
   try {
     const fs = (await import("fs")).default;
     const path = (await import("path")).default;
+    const { execSync } = (await import("child_process")).default;
 
     console.log("Removing background for:", destinationName);
-    const bgResponse = await fetch("http://localhost:3001/remove-background-url", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ imageUrl: pollinationsUrl })
-    });
+    const pollinationsRes = await fetch(pollinationsUrl);
     
-    if (bgResponse.ok) {
-      const arrayBuffer = await bgResponse.arrayBuffer();
+    if (pollinationsRes.ok) {
+      const arrayBuffer = await pollinationsRes.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
-      const filename = `sticker_${Date.now()}_${Math.floor(Math.random()*1000)}.png`;
-      const filepath = path.join(process.cwd(), "..", "front", "public", "stickers", filename);
-      fs.writeFileSync(filepath, buffer);
-      finalStickerUrl = `/stickers/${filename}`;
+      
+      const tempFilename = `temp_${Date.now()}_${Math.floor(Math.random()*1000)}.png`;
+      const finalFilename = `sticker_${Date.now()}_${Math.floor(Math.random()*1000)}.png`;
+      
+      const tempFilepath = path.join(process.cwd(), "..", "front", "public", "stickers", tempFilename);
+      const finalFilepath = path.join(process.cwd(), "..", "front", "public", "stickers", finalFilename);
+      
+      fs.writeFileSync(tempFilepath, buffer);
+      
+      // Execute the python script directly
+      const __dirname = path.dirname(new URL(import.meta.url).pathname).replace(/^\/([a-zA-Z]:)/, '$1');
+      const pythonScript = path.join(__dirname, "bg_remover.py");
+      console.log(`Running python script for ${destinationName}...`);
+      execSync(`python "${pythonScript}" "${tempFilepath}" "${finalFilepath}"`);
+      
+      // Clean up temp file
+      if (fs.existsSync(tempFilepath)) {
+        fs.unlinkSync(tempFilepath);
+      }
+      
+      finalStickerUrl = `/stickers/${finalFilename}`;
       console.log("Background removed and saved:", finalStickerUrl);
     } else {
-      console.warn("Background removal failed, falling back to original URL");
+      console.warn("Failed to download image from Pollinations, falling back to original URL");
     }
   } catch (err) {
-    console.error("Error calling bg-remove-api:", err.message);
+    console.error("Error running bg-remover locally:", err.message);
   }
 
   const newSticker = new DestinationSticker({
