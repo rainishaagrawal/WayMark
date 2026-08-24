@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Camera, Edit2, Check, User, MapPin } from "lucide-react";
 
@@ -16,6 +16,25 @@ export default function TravelJourneyBanner({
 }) {
   const constraintsRef = useRef(null);
   
+  const [positions, setPositions] = useState({});
+  useEffect(() => {
+    const saved = localStorage.getItem("sticker_pos");
+    if (saved) {
+      try {
+        setPositions(JSON.parse(saved));
+      } catch (e) {}
+    }
+  }, []);
+
+  const handleDragEnd = (id, info) => {
+    setPositions(prev => {
+      const p = prev[id] || { x: 0, y: 0 };
+      const newPos = { ...prev, [id]: { x: p.x + info.offset.x, y: p.y + info.offset.y } };
+      localStorage.setItem("sticker_pos", JSON.stringify(newPos));
+      return newPos;
+    });
+  };
+  
   return (
     <div ref={constraintsRef} className="relative h-80 md:h-96 rounded-[32px] overflow-hidden shadow-sm bg-[#F9F6F0] flex items-end p-6 md:p-10 border border-[#E5E5E7]/50">
       
@@ -29,30 +48,36 @@ export default function TravelJourneyBanner({
           drag
           dragMomentum={false}
           dragConstraints={constraintsRef}
+          onDragEnd={(e, info) => handleDragEnd("base", info)}
+          initial={positions["base"] ? { x: positions["base"].x, y: positions["base"].y } : { x: 0, y: 0 }}
+          animate={positions["base"] ? { x: positions["base"].x, y: positions["base"].y } : { x: 0, y: 0 }}
           whileDrag={{ scale: 1.05, zIndex: 100 }}
           className="absolute bottom-4 right-8 w-40 md:w-56 h-auto object-contain opacity-95 mix-blend-multiply pointer-events-auto cursor-grab active:cursor-grabbing z-0"
         />
 
-        {/* Safe zone for text/avatar is left ~40%. Base sticker is right ~250px. We put stickers in the middle! */}
-        <div className="absolute top-2 right-[200px] md:right-[260px] bottom-2 left-[35%] flex flex-wrap-reverse justify-end items-end gap-x-0 gap-y-2 pb-2 pl-10 pr-2">
+        {/* Dynamic stickers canvas */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <AnimatePresence>
             {completedTrips.map((trip, idx) => {
               if (!trip.stickerUrl) return null;
               
               const rotate = (idx % 3 === 0) ? -6 : (idx % 3 === 1) ? 8 : -3;
-              const zIndex = idx + 1; // Above the base sticker
+              const zIndex = idx + 1;
+              const startX = idx * 60 + 250;
+              const startY = (idx % 2) * 50 + 50;
               
               return (
                 <motion.div
                   key={trip._id}
-                  initial={{ opacity: 0, scale: 0.5, y: 20, rotate }}
-                  animate={{ opacity: 0.95, scale: 1, y: 0, rotate }}
+                  initial={{ opacity: 0, scale: 0.5, rotate, x: positions[trip._id]?.x || startX, y: positions[trip._id]?.y || startY }}
+                  animate={{ opacity: 0.95, scale: 1, rotate, x: positions[trip._id]?.x || startX, y: positions[trip._id]?.y || startY }}
                   transition={{ duration: 0.6, type: "spring" }}
                   drag
                   dragMomentum={false}
                   dragConstraints={constraintsRef}
+                  onDragEnd={(e, info) => handleDragEnd(trip._id, info)}
                   whileDrag={{ scale: 1.1, zIndex: 100 }}
-                  className="relative -ml-8 hover:z-50 pointer-events-auto cursor-grab active:cursor-grabbing"
+                  className="absolute top-0 left-0 hover:z-50 pointer-events-auto cursor-grab active:cursor-grabbing"
                   style={{ zIndex }}
                 >
                   <img 
@@ -60,6 +85,11 @@ export default function TravelJourneyBanner({
                     alt={trip.landmark || trip.destinationName} 
                     className="w-20 md:w-28 h-auto object-contain mix-blend-multiply"
                     style={{ filter: "contrast(1.2) brightness(1.1)" }}
+                    onError={(e) => { 
+                      e.target.onerror = null; 
+                      e.target.src = "/profile-sticker.png"; 
+                      e.target.style.filter = "none";
+                    }}
                   />
                   {/* Location Tag */}
                   <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white/95 px-2 py-0.5 rounded-full text-[9px] font-black text-[#2A2A2A] shadow-sm whitespace-nowrap tracking-tight uppercase">
