@@ -30,7 +30,7 @@ export const generateDestinationSticker = async (destinationName) => {
     return existingSticker;
   }
 
-  const imagePrompt = `A die-cut travel sticker for ${country} featuring ${landmark} and the national flag of ${country}. The word "${country}" is written at the top in a cute handwritten font. Thick white border around the entire sticker. Solid pure white background. Flat vector illustration style, bright colors, isolated on white`;
+  const imagePrompt = `A single flat 2D vector graphic of one die-cut travel sticker for ${country} featuring ${landmark}. The sticker MUST have a solid thick white border around the art. The word "${country}" is written clearly in a handwritten font. Solid pure white background (#FFFFFF). NO real world objects, NO tables, NO shadows, NO 3D, NO multiple stickers. ONLY ONE flat illustration.`;
   const encodedPrompt = encodeURIComponent(imagePrompt);
   
   const seed = Math.floor(Math.random() * 1000000);
