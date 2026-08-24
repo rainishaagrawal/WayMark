@@ -140,6 +140,8 @@ export default function Festivals() {
                   <img
                     src={fest.image || fest.destination?.images?.[0]}
                     alt={fest.name}
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   {fest.category && (
@@ -212,6 +214,7 @@ export default function Festivals() {
             <img
               src={selectedFestival.image || selectedFestival.destination?.images?.[0]}
               alt={selectedFestival.name}
+              referrerPolicy="no-referrer"
               className="w-full h-56 object-cover rounded-[16px] mb-5 shadow-sm"
             />
             <p className="text-sm text-[#8B8B8B] mb-5 leading-relaxed">{selectedFestival.description}</p>
