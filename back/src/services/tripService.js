@@ -1,5 +1,6 @@
 import Trip from "../models/Trip.js";
 import TripDay from "../models/TripDay.js";
+import { generateDestinationSticker } from "./stickerService.js";
 import PackingChecklist from "../models/PackingChecklist.js";
 import TravelJournal from "../models/TravelJournal.js";
 import GroupTrip from "../models/GroupTrip.js";
@@ -162,6 +163,17 @@ export const completeTrip = async (tripId, userId) => {
 
   trip.status = "COMPLETED";
   trip.completedAt = new Date();
+
+  try {
+    const sticker = await generateDestinationSticker(trip.destinationName || trip.title);
+    if (sticker && sticker.stickerUrl) {
+      trip.stickerUrl = sticker.stickerUrl;
+      trip.landmark = sticker.landmark;
+    }
+  } catch (err) {
+    console.error("Sticker generation failed:", err);
+  }
+
   await trip.save();
 
   // Fire-and-collect side effects

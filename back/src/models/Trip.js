@@ -27,6 +27,8 @@ const tripSchema = new mongoose.Schema(
     bannerImage: { type: String, default: "" },
     isCustomBanner: { type: Boolean, default: false },
     isAiGenerated: { type: Boolean, default: false },
+    landmark: { type: String, default: "" },
+    stickerUrl: { type: String, default: "" },
     aiMeta: {
       interests: { type: [String], default: [] },
       travelStyle: { type: String, default: "" },
