@@ -35,7 +35,10 @@ export default function TravelJourneyBanner({
   };
   
   return (
-    <div className="relative h-80 md:h-96 rounded-[32px] overflow-hidden shadow-sm bg-[#F9F6F0] flex items-end p-6 md:p-10 border border-[#E5E5E7]/50">
+    <div 
+      className="relative h-80 md:h-96 rounded-[32px] overflow-hidden shadow-sm flex items-end p-6 md:p-10 border border-[#E5E5E7]/50 bg-cover bg-center"
+      style={{ backgroundImage: "url('/world-map-bg.jpg')" }}
+    >
       
       {/* Invisible Safe Zone for Dragging */}
       <div ref={constraintsRef} className="absolute inset-4 md:inset-8 pointer-events-none z-0" />
