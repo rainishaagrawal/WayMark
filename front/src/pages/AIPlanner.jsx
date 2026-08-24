@@ -18,7 +18,7 @@ export default function AIPlanner() {
   const [destinationName, setDestinationName] = useState(location.state?.destinationName || '');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [budget, setBudget] = useState('MODERATE');
+  const [budget, setBudget] = useState('');
   const [interests, setInterests] = useState('');
   const [foodPref, setFoodPref] = useState('ANYTHING');
   const [travelStyle, setTravelStyle] = useState('SOLO');
@@ -196,19 +196,17 @@ export default function AIPlanner() {
               </div>
 
               <div>
-                <label className="block text-[#8B8B8B] font-semibold mb-1 uppercase text-[10px]">Budget Tier</label>
+                <label className="block text-[#8B8B8B] font-semibold mb-1 uppercase text-[10px]">Total Budget ({currencyInfo.symbol})</label>
                 <div className="relative">
                   <Wallet className="w-4 h-4 text-[#8B8B8B] absolute left-3 top-1/2 -translate-y-1/2" />
-                  <select
+                  <input
+                    type="number"
                     value={budget}
                     onChange={(e) => setBudget(e.target.value)}
+                    placeholder="e.g. 1500"
                     className="w-full bg-white border border-black/[0.05] text-[#2A2A2A] pl-9 pr-3 py-3 rounded-xl focus:outline-none focus:border-[#D4AF37]/50 shadow-sm appearance-none"
-                  >
-                    <option value="BUDGET">Budget ({currencyInfo.symbol}500 - {currencyInfo.symbol}1,200)</option>
-                    <option value="MODERATE">Moderate ({currencyInfo.symbol}1,500 - {currencyInfo.symbol}3,000)</option>
-                    <option value="LUXURY">Luxury ({currencyInfo.symbol}3,000 - {currencyInfo.symbol}5,000)</option>
-                    <option value="ULTRA_LUXURY">Ultra-Luxury ({currencyInfo.symbol}5,000+)</option>
-                  </select>
+                    required
+                  />
                 </div>
               </div>
 
