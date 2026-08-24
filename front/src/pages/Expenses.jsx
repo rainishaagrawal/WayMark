@@ -119,7 +119,7 @@ export default function Expenses() {
         paidBy: paidByUserId || user?._id,
       });
       
-      const newExp = expRes.data.data;
+      const newExp = expRes.data;
       
       if (splitByPercentage && newExp) {
         const splits = groupMembers.map(m => {
