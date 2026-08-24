@@ -142,6 +142,32 @@ export const getTripExpenses = async (tripId) => {
     return acc;
   }, {});
 
+  // Calculate pairwise settlements
+  const debtors = memberExpenses.filter(m => m.netBalance < 0).map(m => ({ user: m.user, amount: Math.abs(m.netBalance) }));
+  const creditors = memberExpenses.filter(m => m.netBalance > 0).map(m => ({ user: m.user, amount: m.netBalance }));
+  
+  const settlements = [];
+  let d = 0, c = 0;
+  while(d < debtors.length && c < creditors.length) {
+    const debtor = debtors[d];
+    const creditor = creditors[c];
+    const amount = Math.min(debtor.amount, creditor.amount);
+    
+    if (amount > 0.01) {
+       settlements.push({
+         from: debtor.user,
+         to: creditor.user,
+         amount: Math.round(amount * 100) / 100
+       });
+    }
+    
+    debtor.amount -= amount;
+    creditor.amount -= amount;
+    
+    if (debtor.amount < 0.01) d++;
+    if (creditor.amount < 0.01) c++;
+  }
+
   return {
     expenses,
     members,
@@ -149,6 +175,7 @@ export const getTripExpenses = async (tripId) => {
     memberCount,
     perMemberShare,
     memberBalances: memberExpenses,
+    settlements,
     categoryBreakdown,
     isGroupTrip: !!groupTrip,
   };

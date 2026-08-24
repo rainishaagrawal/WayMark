@@ -28,6 +28,7 @@ export default function Expenses() {
     memberCount: 1,
     perMemberShare: 0,
     memberBalances: [],
+    settlements: [],
     isGroupTrip: false,
   });
   const [loading, setLoading] = useState(false);
@@ -64,6 +65,7 @@ export default function Expenses() {
         memberCount: data.memberCount || 1,
         perMemberShare: data.perMemberShare || 0,
         memberBalances: data.memberBalances || [],
+        settlements: data.settlements || [],
         isGroupTrip: data.isGroupTrip || false,
       });
 
@@ -79,6 +81,7 @@ export default function Expenses() {
         memberCount: 1,
         perMemberShare: 0,
         memberBalances: [],
+        settlements: [],
         isGroupTrip: false,
       });
     } finally {
@@ -388,6 +391,37 @@ export default function Expenses() {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+            
+            {/* Settlements Section */}
+            {summaryData.settlements && summaryData.settlements.length > 0 && (
+              <div className="mt-8">
+                <h2 className="text-xs font-bold text-[#8B8B8B] uppercase tracking-wider flex items-center gap-2 pl-2 mb-4">
+                  <CheckCircle2 className="w-4 h-4 text-[#355E4B]" /> How to Settle Up
+                </h2>
+                <div className="bg-white rounded-[24px] border border-[#E5E5E7]/60 shadow-sm p-6 space-y-4">
+                  {summaryData.settlements.map((s, i) => (
+                    <div key={i} className="flex items-center justify-between p-4 bg-[#F9FBF8] rounded-xl border border-[#E5E5E7]/50">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[#FCE8E8] text-[#E02424] flex items-center justify-center shrink-0 border border-[#E02424]/10">
+                          <UserCheck className="w-4 h-4" />
+                        </div>
+                        <span className="font-semibold text-sm text-[#1A1A1A]">
+                          {s.from.name}
+                        </span>
+                        <span className="text-[#8B8B8B] text-xs font-medium">owes</span>
+                        <div className="w-8 h-8 rounded-full bg-[#EAF5EA] text-[#355E4B] flex items-center justify-center shrink-0 border border-[#355E4B]/10">
+                          <UserCheck className="w-4 h-4" />
+                        </div>
+                        <span className="font-semibold text-sm text-[#1A1A1A]">
+                          {s.to.name}
+                        </span>
+                      </div>
+                      <span className="font-bold text-[#1A1A1A]">{formatAmount(s.amount)}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
