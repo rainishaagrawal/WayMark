@@ -52,13 +52,13 @@ export default function TravelJourneyBanner({
                   dragMomentum={false}
                   dragConstraints={constraintsRef}
                   whileDrag={{ scale: 1.1, zIndex: 100 }}
-                  className="relative mix-blend-multiply drop-shadow-sm -ml-8 hover:z-50 pointer-events-auto cursor-grab active:cursor-grabbing"
+                  className="relative -ml-8 hover:z-50 pointer-events-auto cursor-grab active:cursor-grabbing"
                   style={{ zIndex }}
                 >
                   <img 
                     src={trip.stickerUrl} 
                     alt={trip.landmark || trip.destinationName} 
-                    className="w-28 md:w-36 h-auto object-contain drop-shadow-md"
+                    className="w-28 md:w-36 h-auto object-contain mix-blend-multiply"
                     onError={(e) => { e.target.style.display = "none" }}
                   />
                   {/* Location Tag */}
