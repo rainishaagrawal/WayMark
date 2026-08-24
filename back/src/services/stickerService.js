@@ -2,6 +2,14 @@ import { callGeminiAPI } from "../config/aiConfig.js";
 import DestinationSticker from "../models/DestinationSticker.js";
 
 export const generateDestinationSticker = async (destinationName) => {
+  const existingSticker = await DestinationSticker.findOne({
+    destination: { $regex: new RegExp(`^${destinationName}$`, "i") }
+  });
+
+  if (existingSticker) {
+    return existingSticker;
+  }
+
   const prompt = `Return a strict JSON object identifying the country and the most famous iconic visual representation (can be a landmark, monument, or famous local street food like Poha Jalebi) for the destination "${destinationName}". 
   Format: {"country": "...", "landmark": "..."}
   Example for Jaipur: {"country": "India", "landmark": "Hawa Mahal"}
@@ -21,14 +29,6 @@ export const generateDestinationSticker = async (destinationName) => {
     console.error("Failed to parse AI landmark:", err);
     landmark = destinationName;
     country = "Unknown";
-  }
-
-  const existingSticker = await DestinationSticker.findOne({
-    destination: { $regex: new RegExp(`^${destinationName}$`, "i") }
-  });
-
-  if (existingSticker) {
-    return existingSticker;
   }
 
   const imagePrompt = `Cute hand-drawn watercolor travel sticker of ${landmark} in ${country}. Features the landmark and a small national flag. Thick white die-cut border. Clean, colorful clipart isolated on a pure solid white background. No extra text, no shadows, in the style of a scrapbook die-cut sticker.`;
