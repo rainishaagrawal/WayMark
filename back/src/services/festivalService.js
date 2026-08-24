@@ -182,7 +182,8 @@ const seedFestivalsIfEmpty = async () => {
       const startDate = new Date(fest.start);
       const endDate = new Date(fest.end);
       
-      const imageUrl = getDestinationImage(fest.destinationName);
+      const prompt = "Realistic, high quality, vibrant photography of " + fest.name + " in " + fest.destinationName + ", people celebrating, wide angle, event photography.";
+      const imageUrl = "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt) + "?width=800&height=600&nologo=true";
 
       await Festival.create({
         name: fest.name,
