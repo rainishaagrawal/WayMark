@@ -59,7 +59,7 @@ export const callGroqAPI = async (prompt, systemInstruction = "") => {
     const response = await axios.post(
       GROQ_URL,
       {
-        model: "llama-3.3-70b-versatile",
+        model: "openai/gpt-oss-20b",
         messages: [
           ...(systemInstruction ? [{ role: "system", content: systemInstruction }] : []),
           { role: "user", content: prompt },

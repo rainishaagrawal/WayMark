@@ -309,8 +309,26 @@ export default function AIPlanner() {
       ))}
     </div>
     <div className="mt-2 p-4 glass-card">
-      <h4 className="font-semibold mb-2">Day {selectedDay + 1} Details</h4>
-      <p className="text-sm text-[#4A4A4A]">{generatedResult.itinerary.days[selectedDay].description}</p>
+      <h4 className="font-semibold text-sm mb-2 text-[#2A2A2A]">{generatedResult.itinerary.days[selectedDay].title}</h4>
+      <div className="space-y-3 mt-3">
+        {['morning', 'afternoon', 'evening'].map(time => {
+          const acts = generatedResult.itinerary.days[selectedDay][time];
+          if (!acts || acts.length === 0) return null;
+          return (
+            <div key={time}>
+              <h5 className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-wider mb-1">{time}</h5>
+              <div className="space-y-2">
+                {acts.map((act, i) => (
+                  <div key={i} className="text-xs">
+                    <span className="font-semibold text-[#1A3626] block">{act.title}</span>
+                    <span className="text-[#8B8B8B] block mt-0.5">{act.description}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   </div>
 )}
