@@ -190,7 +190,7 @@ const seedFestivalsIfEmpty = async () => {
 export const getAllFestivals = async (queryParams = {}) => {
   await seedFestivalsIfEmpty();
 
-  const { category, page = 1, limit = 20 } = queryParams;
+  const { category, page = 1, limit = 100 } = queryParams;
   const query = {};
   if (category) query.category = category;
 
