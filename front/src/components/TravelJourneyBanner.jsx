@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Camera, Edit2, Check, User, MapPin } from "lucide-react";
 
@@ -14,27 +14,32 @@ export default function TravelJourneyBanner({
   handleAvatarChange, 
   uploadingAvatar 
 }) {
+  const constraintsRef = useRef(null);
+  
   return (
-    <div className="relative h-64 rounded-[32px] overflow-hidden shadow-sm bg-[#F9F6F0] flex items-end p-6 md:p-10 border border-[#E5E5E7]/50">
+    <div ref={constraintsRef} className="relative h-64 rounded-[32px] overflow-hidden shadow-sm bg-[#F9F6F0] flex items-end p-6 md:p-10 border border-[#E5E5E7]/50">
       
       {/* Background Stickers Area */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        
+        {/* Base Sticker - Always visible and draggable */}
+        <motion.img 
+          src="/profile-sticker.png" 
+          alt="Vintage Travel Elements"
+          drag
+          dragConstraints={constraintsRef}
+          whileDrag={{ scale: 1.05, zIndex: 100 }}
+          className="absolute bottom-4 right-8 w-40 md:w-56 h-auto object-contain opacity-95 mix-blend-multiply pointer-events-auto cursor-grab active:cursor-grabbing z-0"
+        />
+
         {/* Safe zone for text/avatar is left ~40%. We put stickers on the right 60% */}
         <div className="absolute top-2 right-4 bottom-2 left-[35%] flex flex-wrap-reverse justify-end items-end gap-x-0 gap-y-2 pb-2 pl-10 pr-2" style={{ WebkitMaskImage: "linear-gradient(to right, transparent, black 15%)" }}>
           <AnimatePresence>
-            {completedTrips.length === 0 && (
-              <img 
-                src="/profile-sticker.png" 
-                alt="Vintage Travel Elements"
-                className="w-40 md:w-56 h-auto object-contain opacity-95 mix-blend-multiply"
-              />
-            )}
-            
             {completedTrips.map((trip, idx) => {
               if (!trip.stickerUrl) return null;
               
               const rotate = (idx % 3 === 0) ? -6 : (idx % 3 === 1) ? 8 : -3;
-              const zIndex = idx;
+              const zIndex = idx + 1; // Above the base sticker
               
               return (
                 <motion.div
@@ -42,7 +47,10 @@ export default function TravelJourneyBanner({
                   initial={{ opacity: 0, scale: 0.5, y: 20 }}
                   animate={{ opacity: 0.95, scale: 1, y: 0 }}
                   transition={{ duration: 0.6, type: "spring" }}
-                  className="relative mix-blend-multiply drop-shadow-sm -ml-8 hover:z-50 transition-transform"
+                  drag
+                  dragConstraints={constraintsRef}
+                  whileDrag={{ scale: 1.1, zIndex: 100 }}
+                  className="relative mix-blend-multiply drop-shadow-sm -ml-8 hover:z-50 transition-transform pointer-events-auto cursor-grab active:cursor-grabbing"
                   style={{ transform: `rotate(${rotate}deg)`, zIndex }}
                 >
                   <img 
