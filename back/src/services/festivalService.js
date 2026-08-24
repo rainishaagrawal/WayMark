@@ -182,7 +182,7 @@ const seedFestivalsIfEmpty = async () => {
       const startDate = new Date(fest.start);
       const endDate = new Date(fest.end);
       
-      const imageUrl = `https://loremflickr.com/800/600/${encodeURIComponent(fest.name.split(' ')[0])}?random=${i}`;
+      const imageUrl = getDestinationImage(fest.destinationName);
 
       await Festival.create({
         name: fest.name,
