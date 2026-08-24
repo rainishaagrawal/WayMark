@@ -16,15 +16,14 @@ export default function TravelJourneyBanner({
 }) {
   const constraintsRef = useRef(null);
   
-  const [positions, setPositions] = useState({});
-  useEffect(() => {
-    const saved = localStorage.getItem("sticker_pos");
-    if (saved) {
-      try {
-        setPositions(JSON.parse(saved));
-      } catch (e) {}
+  const [positions, setPositions] = useState(() => {
+    try {
+      const saved = localStorage.getItem("sticker_pos");
+      return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+      return {};
     }
-  }, []);
+  });
 
   const handleDragEnd = (id, info) => {
     setPositions(prev => {
@@ -36,8 +35,11 @@ export default function TravelJourneyBanner({
   };
   
   return (
-    <div ref={constraintsRef} className="relative h-80 md:h-96 rounded-[32px] overflow-hidden shadow-sm bg-[#F9F6F0] flex items-end p-6 md:p-10 border border-[#E5E5E7]/50">
+    <div className="relative h-80 md:h-96 rounded-[32px] overflow-hidden shadow-sm bg-[#F9F6F0] flex items-end p-6 md:p-10 border border-[#E5E5E7]/50">
       
+      {/* Invisible Safe Zone for Dragging */}
+      <div ref={constraintsRef} className="absolute inset-4 md:inset-8 pointer-events-none z-0" />
+
       {/* Background Stickers Area */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         
