@@ -156,7 +156,16 @@ const CURATED_FESTIVALS = [
   { name: "Taste of Chicago", destinationName: "Chicago, USA", description: "The world's largest food festival.", start: "2026-07-08", end: "2026-07-12", category: "FOOD" },
   { name: "Pizzafest", destinationName: "Naples, Italy", description: "A celebration of pizza in its birthplace.", start: "2026-09-04", end: "2026-09-13", category: "FOOD" },
   { name: "Salon du Chocolat", destinationName: "Paris, France", description: "A yearly trade fair for the international chocolate industry.", start: "2026-10-28", end: "2026-11-01", category: "FOOD" },
-  { name: "Melbourne Food and Wine Festival", destinationName: "Melbourne, Australia", description: "A gastronomic event celebrating food and wine.", start: "2026-03-13", end: "2026-03-22", category: "FOOD" }
+  { name: "Melbourne Food and Wine Festival", destinationName: "Melbourne, Australia", description: "A gastronomic event celebrating food and wine.", start: "2026-03-13", end: "2026-03-22", category: "FOOD" },
+  { name: "Strasbourg Christmas Market", destinationName: "Strasbourg, France", description: "One of the oldest and most famous Christmas markets in Europe.", start: "2026-11-27", end: "2026-12-30", category: "CULTURAL" },
+  { name: "Sunburn Festival", destinationName: "Goa, India", description: "Asia's biggest electronic dance music festival on the beaches of Goa.", start: "2026-12-27", end: "2026-12-29", category: "MUSIC" },
+  { name: "Hornbill Festival", destinationName: "Kohima, India", description: "The 'Festival of Festivals' showcasing the rich culture of Nagaland tribes.", start: "2026-12-01", end: "2026-12-10", category: "CULTURAL" },
+  { name: "Mevlana Whirling Dervishes Festival", destinationName: "Konya, Turkey", description: "A spiritual and mesmerizing Sufi festival honoring the poet Rumi.", start: "2026-12-10", end: "2026-12-17", category: "RELIGIOUS" },
+  { name: "Chichibu Night Festival", destinationName: "Saitama, Japan", description: "A famous Japanese winter festival featuring massive, ornate floats and fireworks.", start: "2026-12-02", end: "2026-12-03", category: "CULTURAL" },
+  { name: "SnowGlobe Music Festival", destinationName: "South Lake Tahoe, USA", description: "An outdoor winter music festival combining skiing and electronic music.", start: "2026-12-29", end: "2026-12-31", category: "MUSIC" },
+  { name: "Hogmanay", destinationName: "Edinburgh, Scotland", description: "Scotland's world-famous New Year celebration with street parties and firework displays.", start: "2026-12-30", end: "2026-12-31", category: "CULTURAL" },
+  { name: "Wonderfruit", destinationName: "Pattaya, Thailand", description: "An annual gathering that explores art, music, food, and wellness in beautiful fields.", start: "2026-12-10", end: "2026-12-14", category: "MUSIC" },
+  { name: "Krampusnacht", destinationName: "Salzburg, Austria", description: "A traditional European winter festival where people dress as Krampus.", start: "2026-12-05", end: "2026-12-06", category: "CULTURAL" }
 ];
 
 const seedFestivalsIfEmpty = async () => {
