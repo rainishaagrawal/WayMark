@@ -34,7 +34,7 @@ export default function TravelJourneyBanner({
         />
 
         {/* Safe zone for text/avatar is left ~40%. Base sticker is right ~250px. We put stickers in the middle! */}
-        <div className="absolute top-2 right-[200px] md:right-[260px] bottom-2 left-[35%] flex flex-wrap-reverse justify-end items-end gap-x-0 gap-y-2 pb-2 pl-10 pr-2" style={{ WebkitMaskImage: "linear-gradient(to right, transparent, black 15%)" }}>
+        <div className="absolute top-2 right-[200px] md:right-[260px] bottom-2 left-[35%] flex flex-wrap-reverse justify-end items-end gap-x-0 gap-y-2 pb-2 pl-10 pr-2">
           <AnimatePresence>
             {completedTrips.map((trip, idx) => {
               if (!trip.stickerUrl) return null;
@@ -58,8 +58,8 @@ export default function TravelJourneyBanner({
                   <img 
                     src={trip.stickerUrl} 
                     alt={trip.landmark || trip.destinationName} 
-                    className="w-32 md:w-40 h-auto object-contain mix-blend-multiply"
-                    onError={(e) => { e.target.style.display = "none" }}
+                    className="w-20 md:w-28 h-auto object-contain mix-blend-multiply"
+                    style={{ filter: "contrast(1.2) brightness(1.1)" }}
                   />
                   {/* Location Tag */}
                   <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white/95 px-2 py-0.5 rounded-full text-[9px] font-black text-[#2A2A2A] shadow-sm whitespace-nowrap tracking-tight uppercase">
