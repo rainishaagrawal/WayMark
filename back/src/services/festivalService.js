@@ -165,7 +165,10 @@ const CURATED_FESTIVALS = [
   { name: "SnowGlobe Music Festival", destinationName: "South Lake Tahoe, USA", description: "An outdoor winter music festival combining skiing and electronic music.", start: "2026-12-29", end: "2026-12-31", category: "MUSIC" },
   { name: "Hogmanay", destinationName: "Edinburgh, Scotland", description: "Scotland's world-famous New Year celebration with street parties and firework displays.", start: "2026-12-30", end: "2026-12-31", category: "CULTURAL" },
   { name: "Wonderfruit", destinationName: "Pattaya, Thailand", description: "An annual gathering that explores art, music, food, and wellness in beautiful fields.", start: "2026-12-10", end: "2026-12-14", category: "MUSIC" },
-  { name: "Krampusnacht", destinationName: "Salzburg, Austria", description: "A traditional European winter festival where people dress as Krampus.", start: "2026-12-05", end: "2026-12-06", category: "CULTURAL" }
+  { name: "Krampusnacht", destinationName: "Salzburg, Austria", description: "A traditional European winter festival where people dress as Krampus.", start: "2026-12-05", end: "2026-12-06", category: "CULTURAL" },
+  { name: "Christmas", destinationName: "Global", description: "The worldwide celebration of Christmas with lights, feasts, and gift-giving.", start: "2026-12-25", end: "2026-12-25", category: "RELIGIOUS" },
+  { name: "New Year's Eve", destinationName: "Global", description: "Worldwide celebrations ringing in the new year with spectacular fireworks and parties.", start: "2026-12-31", end: "2026-12-31", category: "CULTURAL" },
+  { name: "Halloween", destinationName: "Global", description: "Global spooky celebrations featuring costumes, trick-or-treating, and haunted houses.", start: "2026-10-31", end: "2026-10-31", category: "CULTURAL" }
 ];
 
 const seedFestivalsIfEmpty = async () => {
