@@ -75,7 +75,7 @@ export default function Profile() {
         <img 
           src="/profile-sticker.png" 
           alt="Vintage Travel Elements"
-          className="absolute bottom-4 right-8 w-64 md:w-80 h-auto object-contain opacity-95 mix-blend-multiply pointer-events-none"
+          className="absolute bottom-4 right-8 w-40 md:w-56 h-auto object-contain opacity-95 mix-blend-multiply pointer-events-none"
         />
         
         <div className="relative z-10 w-full flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
