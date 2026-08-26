@@ -1,22 +1,24 @@
-export const buildItineraryPrompt = ({ destination, days, budget, interests, foodPref, travelStyle }) => {
+export const buildItineraryPrompt = ({ destination, originCity, days, budget, currency, interests, foodPref, travelStyle }) => {
+  const budgetContext = originCity && budget 
+    ? `\n    - Budget: ${budget} ${currency}\n    - Origin City: ${originCity}`
+    : `\n    - Budget Tier: ${budget}`;
+
   return `
     You are an expert AI Travel Planner for WayMark.
     Generate a detailed ${days}-day travel itinerary for "${destination}".
-    User Preferences:
-    - Budget: ${budget}
+    User Preferences:${budgetContext}
     - Interests: ${Array.isArray(interests) ? interests.join(", ") : interests}
     - Food Preference: ${foodPref}
     - Travel Style: ${travelStyle}
 
-    IMPORTANT: Make the itinerary genuinely unique to "${destination}" - use real, specific, well-known
-    landmarks, neighborhoods, and local dish names for that exact destination. Do not reuse generic
-    placeholder activity names. Every destination should produce a clearly different itinerary.
+    CRITICAL BUDGET VALIDATION:
+    If the user provided an exact Budget and an Origin City, you MUST validate if the budget is practically possible to cover average RETURN FLIGHTS from ${originCity} to ${destination} PLUS basic accommodation, food, and transport for ${days} days.
+    If the budget is impossibly low for this entire trip, ABORT the itinerary generation and return ONLY this JSON format:
+    {
+      "error": "Your budget of ${budget} ${currency} is too low for a ${days}-day trip to ${destination} from ${originCity}. A realistic minimum is roughly [Calculate Minimum Here] ${currency}."
+    }
 
-    IMPORTANT for tripTitle: Keep it SHORT and CATCHY — just a creative name for the trip.
-    Examples: "Exploring Kyoto", "Paris Getaway", "Bali Beach Escape", "Rome Heritage Tour".
-    Do NOT include the number of days, travel style, or any long phrases in the title.
-
-    Respond strictly in JSON format matching this schema:
+    Otherwise, if the budget is acceptable or missing, generate the itinerary and respond strictly in JSON format matching this schema:
     {
       "tripTitle": "String (short, catchy — e.g. 'Exploring Kyoto')",
       "summary": "String",
@@ -33,6 +35,8 @@ export const buildItineraryPrompt = ({ destination, days, budget, interests, foo
         }
       ]
     }
+    
+    IMPORTANT: Make the itinerary genuinely unique to "${destination}" - use real, specific, well-known landmarks.
   `;
 };
 

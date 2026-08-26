@@ -68,7 +68,10 @@ export const generateTripItinerary = async (userId, tripData) => {
   const diffDays = Math.ceil(Math.abs(end - start) / (1000 * 60 * 60 * 24)) + 1;
   const numDays = Math.min(Math.max(diffDays, 1), 14);
 
-  const prompt = buildItineraryPrompt({ destination: destinationName, days: numDays, budget, interests, foodPref, travelStyle });
+  const userRecord = await User.findById(userId);
+  const currency = userRecord?.preferredCurrency || "USD";
+
+  const prompt = buildItineraryPrompt({ destination: destinationName, originCity: tripData.originCity, days: numDays, budget, currency, interests, foodPref, travelStyle });
 
   const mockFallback = {
     tripTitle: `Exploring ${destinationName}`,
@@ -92,6 +95,10 @@ export const generateTripItinerary = async (userId, tripData) => {
   };
 
   const aiResult = await executeAiPrompt(prompt, "You are a professional travel planner. Always tailor content specifically to the named destination.", mockFallback);
+
+  if (aiResult.error) {
+    throw new ApiError(400, aiResult.error);
+  }
 
   const bannerImage = getDestinationImage(destinationName);
 

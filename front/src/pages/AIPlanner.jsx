@@ -15,6 +15,7 @@ export default function AIPlanner() {
   const { currencyInfo } = useCurrency();
   const [plannerMode, setPlannerMode] = useState('AI');
 
+  const [originCity, setOriginCity] = useState('');
   const [destinationName, setDestinationName] = useState(location.state?.destinationName || '');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -26,6 +27,7 @@ export default function AIPlanner() {
   const [generatedResult, setGeneratedResult] = useState(null);
 
   const [manualTitle, setManualTitle] = useState('');
+  const [manualOrigin, setManualOrigin] = useState('');
   const [manualDestination, setManualDestination] = useState('');
   const [manualStart, setManualStart] = useState('');
   const [manualEnd, setManualEnd] = useState('');
@@ -42,8 +44,8 @@ export default function AIPlanner() {
 
   const handleGenerateAI = async (e) => {
     e.preventDefault();
-    if (!destinationName || !startDate || !endDate || !budget) {
-      toast.error('Please fill in destination, dates, and budget');
+    if (!originCity || !destinationName || !startDate || !endDate || !budget) {
+      toast.error('Please fill in origin, destination, dates, and budget');
       return;
     }
     if (new Date(startDate) > new Date(endDate)) {
@@ -59,6 +61,7 @@ export default function AIPlanner() {
 
     try {
       const res = await api.post('/ai/plan-trip', {
+        originCity,
         destinationName,
         startDate,
         endDate,
@@ -167,18 +170,35 @@ export default function AIPlanner() {
             </h3>
 
             <form onSubmit={handleGenerateAI} className="space-y-4 text-xs">
-              <div>
-                <label className="block text-[#8B8B8B] font-semibold mb-1 uppercase text-[10px]">Destination</label>
-                <div className="relative">
-                  <MapPin className="w-4 h-4 text-[#D4AF37] absolute left-3 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={destinationName}
-                    onChange={(e) => setDestinationName(e.target.value)}
-                    placeholder="e.g. Kyoto, Japan"
-                    className="w-full bg-white border border-black/[0.05] text-[#2A2A2A] pl-9 pr-3 py-3 rounded-xl focus:outline-none focus:border-[#D4AF37]/50 shadow-sm"
-                    required
-                  />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[#8B8B8B] font-semibold mb-1 uppercase text-[10px]">Flying From (Origin)</label>
+                  <div className="relative">
+                    <MapPin className="w-4 h-4 text-[#8B8B8B] absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      value={originCity}
+                      onChange={(e) => setOriginCity(e.target.value)}
+                      placeholder="e.g. New York, USA"
+                      className="w-full bg-white border border-black/[0.05] text-[#2A2A2A] pl-9 pr-3 py-3 rounded-xl focus:outline-none focus:border-[#D4AF37]/50 shadow-sm"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[#8B8B8B] font-semibold mb-1 uppercase text-[10px]">Destination</label>
+                  <div className="relative">
+                    <MapPin className="w-4 h-4 text-[#D4AF37] absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      value={destinationName}
+                      onChange={(e) => setDestinationName(e.target.value)}
+                      placeholder="e.g. Kyoto, Japan"
+                      className="w-full bg-white border border-black/[0.05] text-[#2A2A2A] pl-9 pr-3 py-3 rounded-xl focus:outline-none focus:border-[#D4AF37]/50 shadow-sm"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 
