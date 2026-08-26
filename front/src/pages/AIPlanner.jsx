@@ -42,8 +42,16 @@ export default function AIPlanner() {
 
   const handleGenerateAI = async (e) => {
     e.preventDefault();
-    if (!destinationName || !startDate || !endDate) {
-      toast.error('Please fill in destination and dates');
+    if (!destinationName || !startDate || !endDate || !budget) {
+      toast.error('Please fill in destination, dates, and budget');
+      return;
+    }
+    if (new Date(startDate) > new Date(endDate)) {
+      toast.error('End date cannot be before the start date');
+      return;
+    }
+    if (Number(budget) <= 0) {
+      toast.error('Budget must be greater than 0');
       return;
     }
     setIsGenerating(true);
@@ -64,7 +72,7 @@ export default function AIPlanner() {
       toast.success('Your AI itinerary is ready!', { id: 'ai_gen' });
       await afterTripCreated(res.data.trip);
     } catch (err) {
-      toast.error(err.message || 'Failed to generate itinerary', { id: 'ai_gen' });
+      toast.error(err.response?.data?.message || err.message || 'Failed to generate itinerary', { id: 'ai_gen' });
     } finally {
       setIsGenerating(false);
     }
@@ -74,6 +82,14 @@ export default function AIPlanner() {
     e.preventDefault();
     if (!manualTitle || !manualDestination || !manualStart || !manualEnd) {
       toast.error('Please fill in title, destination and dates');
+      return;
+    }
+    if (new Date(manualStart) > new Date(manualEnd)) {
+      toast.error('End date cannot be before the start date');
+      return;
+    }
+    if (Number(manualBudget) <= 0) {
+      toast.error('Budget must be greater than 0');
       return;
     }
     setIsSavingManual(true);
@@ -92,7 +108,7 @@ export default function AIPlanner() {
       toast.success('Trip created successfully!', { id: 'manual_trip' });
       await afterTripCreated(res.data);
     } catch (err) {
-      toast.error(err.message || 'Failed to create trip', { id: 'manual_trip' });
+      toast.error(err.response?.data?.message || err.message || 'Failed to create trip', { id: 'manual_trip' });
     } finally {
       setIsSavingManual(false);
     }

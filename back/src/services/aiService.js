@@ -56,6 +56,15 @@ export const generateTripItinerary = async (userId, tripData) => {
 
   const start = new Date(startDate);
   const end = new Date(endDate);
+  
+  if (start > end) {
+    throw new ApiError(400, "End date cannot be before the start date.");
+  }
+  
+  if (budget !== undefined && Number(budget) <= 0) {
+    throw new ApiError(400, "Budget must be greater than 0.");
+  }
+
   const diffDays = Math.ceil(Math.abs(end - start) / (1000 * 60 * 60 * 24)) + 1;
   const numDays = Math.min(Math.max(diffDays, 1), 14);
 
@@ -201,13 +210,24 @@ export const createManualTrip = async (userId, tripData) => {
     console.warn("Destination auto-resolution skipped:", e.message);
   }
 
+  const start = new Date(startDate || Date.now());
+  const end = new Date(endDate || Date.now() + 7 * 86400000);
+  
+  if (start > end) {
+    throw new ApiError(400, "End date cannot be before the start date.");
+  }
+  
+  if (budgetAmount !== undefined && Number(budgetAmount) <= 0) {
+    throw new ApiError(400, "Budget must be greater than 0.");
+  }
+
   const trip = await Trip.create({
     user: userId,
     title: title || `Trip to ${destinationName || "New Destination"}`,
     destinationName: destinationName || "",
     destination: destination?._id || null,
-    startDate: new Date(startDate || Date.now()),
-    endDate: new Date(endDate || Date.now() + 7 * 86400000),
+    startDate: start,
+    endDate: end,
     budget: { totalAmount: parseFloat(budgetAmount) || 1000, spentAmount: 0 },
     status: "PLANNED",
     notes: notes || "",
