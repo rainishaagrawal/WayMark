@@ -149,6 +149,7 @@ export const generateTripItinerary = async (userId, tripData) => {
       travelStyle,
       foodPref,
       budgetTier: budget,
+      transportOptions: aiResult.transportOptions || [],
     },
   });
 
@@ -159,6 +160,21 @@ export const generateTripItinerary = async (userId, tripData) => {
   } else if (Array.isArray(aiResult.days)) {
     daysArray = aiResult.days;
   }
+  
+  // STRICT FIX: Ensure AI does not hallucinate extra days beyond the user's dates
+  daysArray = daysArray.slice(0, numDays);
+
+  // Pad missing days if AI generated fewer days than expected
+  while (daysArray.length < numDays) {
+    daysArray.push({
+      dayNumber: daysArray.length + 1,
+      title: "Free Day / Departure",
+      morning: [],
+      afternoon: [],
+      evening: []
+    });
+  }
+
   for (let i = 0; i < daysArray.length; i++) {
     const day = daysArray[i];
     const dNum = day.dayNumber || (i + 1);

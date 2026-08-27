@@ -25,6 +25,13 @@ export const buildItineraryPrompt = ({ destination, originCity, days, budget, cu
       "safetyTips": ["String"],
       "packingItems": [{"item": "String", "category": "String"}],
       "estimatedTotalBudget": 0,
+      "transportOptions": [
+        {
+          "mode": "String (Flight, Train, Bus, Car)",
+          "approxCost": "String",
+          "duration": "String"
+        }
+      ],
       "days": [
         {
           "dayNumber": 1,

@@ -34,6 +34,13 @@ const tripSchema = new mongoose.Schema(
       travelStyle: { type: String, default: "" },
       foodPref: { type: String, default: "" },
       budgetTier: { type: String, default: "" },
+      transportOptions: [
+        {
+          mode: String,
+          approxCost: String,
+          duration: String
+        }
+      ]
     },
     completedAt: { type: Date, default: null },
   },

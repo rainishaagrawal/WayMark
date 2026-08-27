@@ -176,6 +176,24 @@ export default function TripDetails() {
         </button>
       </div>
 
+      {/* Transport Options (AI Estimated) */}
+      {trip.aiMeta?.transportOptions && trip.aiMeta.transportOptions.length > 0 && (
+        <div className="glass-card p-6 space-y-4">
+          <h3 className="text-xs font-bold text-[#8B8B8B] uppercase tracking-wider flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-[#D4AF37]" /> Approximate Transport Estimates (From Origin)
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3">
+            {trip.aiMeta.transportOptions.map((opt, i) => (
+              <div key={i} className="bg-white border border-[#E5E5E7] p-4 rounded-2xl shadow-sm flex flex-col items-center text-center hover:border-[#D4AF37]/30 transition-all">
+                <span className="text-[#1A1A1A] font-bold text-sm mb-1">{opt.mode}</span>
+                <span className="text-[#D4AF37] font-extrabold text-sm mb-1">{opt.approxCost}</span>
+                <span className="text-[#8B8B8B] text-[10px] font-semibold uppercase tracking-wider">{opt.duration}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Itinerary */}
       <div className="glass-card p-6 space-y-6">
         <div className="flex items-center justify-between">
