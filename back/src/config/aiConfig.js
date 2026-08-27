@@ -6,7 +6,7 @@ const GROQ_API_KEY = process.env.GROQ_API_KEY || "MOCK_GROQ_KEY";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${GEMINI_API_KEY}`;
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
-export const callGeminiAPI = async (prompt, systemInstruction = "", imageData = null) => {
+export const callGeminiAPI = async (prompt, systemInstruction = "", imageData = null, retries = 3) => {
   try {
     const parts = [];
     if (systemInstruction) parts.push({ text: systemInstruction });
@@ -20,30 +20,41 @@ export const callGeminiAPI = async (prompt, systemInstruction = "", imageData = 
     }
     parts.push({ text: prompt });
 
-    const response = await axios.post(
-      GEMINI_URL,
-      {
-        contents: [
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        const response = await axios.post(
+          GEMINI_URL,
           {
-            parts: parts,
+            contents: [
+              {
+                parts: parts,
+              },
+            ],
+            generationConfig: {
+              responseMimeType: "application/json",
+              temperature: 0.7,
+            },
           },
-        ],
-        generationConfig: {
-          responseMimeType: "application/json",
-          temperature: 0.7,
-        },
-      },
-      { headers: { "Content-Type": "application/json" } }
-    );
+          { headers: { "Content-Type": "application/json" } }
+        );
 
-    let text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!text) throw new Error("Empty response from Gemini API");
-    text = text.replace(/```json/gi, "").replace(/```/g, "").trim();
-    try {
-      return JSON.parse(text);
-    } catch (parseErr) {
-      console.warn("JSON Parse Failed for text:", text);
-      throw parseErr;
+        let text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!text) throw new Error("Empty response from Gemini API");
+        text = text.replace(/```json/gi, "").replace(/```/g, "").trim();
+        try {
+          return JSON.parse(text);
+        } catch (parseErr) {
+          console.warn("JSON Parse Failed for text:", text);
+          throw parseErr;
+        }
+      } catch (err) {
+        if (err.response?.status === 429 && attempt < retries) {
+          console.warn(`Gemini 429 Quota Exceeded. Retrying in 5 seconds... (Attempt ${attempt}/${retries})`);
+          await new Promise(resolve => setTimeout(resolve, 5000));
+        } else {
+          throw err;
+        }
+      }
     }
   } catch (error) {
     console.warn("⚠️ Gemini API call failed or unparseable, attempting Groq fallback:", error.message);
