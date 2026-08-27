@@ -10,7 +10,9 @@ import Trip from "../models/Trip.js";
 import TripDay from "../models/TripDay.js";
 import TravelJournal from "../models/TravelJournal.js";
 import PackingChecklist from "../models/PackingChecklist.js";
+import User from "../models/User.js";
 import { createNotification } from "./notificationService.js";
+import { ApiError } from "../utils/ApiError.js";
 
 /**
  * AI Trip Planner Service.
