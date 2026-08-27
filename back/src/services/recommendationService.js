@@ -40,6 +40,10 @@ export const getPersonalizedRecommendations = async (userId) => {
 
   const recommendations = await executeAiPrompt(prompt, "You are a Personalized AI Recommendation Engine.", mockFallback);
 
+  if (recommendations === mockFallback) {
+    throw new Error("Failed to fetch personalized recommendations due to high AI service traffic.");
+  }
+
   // Ensure every recommended destination has an image for the wishlist/explore UI
   if (Array.isArray(recommendations.recommendedDestinations)) {
     recommendations.recommendedDestinations = recommendations.recommendedDestinations.map((d) => ({

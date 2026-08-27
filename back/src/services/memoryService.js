@@ -132,6 +132,10 @@ export const generateUserTravelDna = async (userId) => {
 
   const dnaResult = await executeAiPrompt(prompt, "You are a Travel Profiling AI.", mockFallback);
 
+  if (dnaResult === mockFallback) {
+    throw new Error("AI Services are currently experiencing high traffic. Could not process Travel DNA.");
+  }
+
   const dna = await TravelDNA.findOneAndUpdate(
     { user: userId },
     { $set: { user: userId, ...dnaResult } },

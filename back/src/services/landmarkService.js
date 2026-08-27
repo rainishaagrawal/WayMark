@@ -22,6 +22,10 @@ export const detectLandmarkFromImage = async (fileBuffer, mimeType = "image/jpeg
 
   const detectionResult = await executeAiPrompt(prompt, "You are a Vision AI for Landmark Detection.", mockFallback, imageData);
 
+  if (detectionResult === mockFallback) {
+    throw new Error("Failed to detect landmark from the image. Please try a clearer image or try again later.");
+  }
+
   let nearbyPois = null;
   try {
     const coords = await getCoordinates(`${detectionResult.landmarkName}, ${detectionResult.city}`);
