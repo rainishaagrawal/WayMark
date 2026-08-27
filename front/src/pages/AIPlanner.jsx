@@ -66,6 +66,7 @@ export default function AIPlanner() {
         startDate,
         endDate,
         budget,
+        currency: currencyInfo?.code || 'USD',
         interests: interests.split(',').map((s) => s.trim()).filter(Boolean),
         foodPref,
         travelStyle,

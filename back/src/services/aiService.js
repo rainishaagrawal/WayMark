@@ -71,7 +71,7 @@ export const generateTripItinerary = async (userId, tripData) => {
   const numDays = Math.min(Math.max(diffDays, 1), 14);
 
   const userRecord = await User.findById(userId);
-  const currency = userRecord?.preferredCurrency || "USD";
+  const currency = tripData.currency || userRecord?.preferredCurrency || "USD";
 
   const prompt = buildItineraryPrompt({ destination: destinationName, originCity: tripData.originCity, days: numDays, budget, currency, interests, foodPref, travelStyle });
 
@@ -86,7 +86,7 @@ export const generateTripItinerary = async (userId, tripData) => {
       { item: "Universal Adapter", category: "Electronics" },
       { item: "Reusable Water Bottle", category: "Miscellaneous" },
     ],
-    estimatedTotalBudgetUSD: budget === "LUXURY" ? 4200 : budget === "ULTRA_LUXURY" ? 7500 : budget === "BUDGET" ? 900 : 2200,
+    estimatedTotalBudget: budget === "LUXURY" ? 4200 : budget === "ULTRA_LUXURY" ? 7500 : budget === "BUDGET" ? 900 : 2200,
     days: Array.from({ length: numDays }, (_, i) => ({
       dayNumber: i + 1,
       title: `Day ${i + 1}: Discovering ${destinationName}`,
@@ -131,7 +131,7 @@ export const generateTripItinerary = async (userId, tripData) => {
     destination: destination?._id || null,
     startDate: start,
     endDate: end,
-    budget: { totalAmount: parseBudget(aiResult.estimatedTotalBudgetUSD), spentAmount: 0 },
+    budget: { totalAmount: parseBudget(aiResult.estimatedTotalBudget || aiResult.estimatedTotalBudgetUSD), spentAmount: 0 },
     status: "PLANNED",
     notes: aiResult.summary || "",
     bannerImage,

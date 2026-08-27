@@ -18,13 +18,13 @@ export const buildItineraryPrompt = ({ destination, originCity, days, budget, cu
       "error": "Your budget of ${budget} ${currency} is too low for a ${days}-day trip to ${destination} from ${originCity}. A realistic minimum is roughly [Calculate Minimum Here] ${currency}."
     }
 
-    Otherwise, if the budget is acceptable or missing, generate the itinerary and respond strictly in JSON format matching this schema:
+    Otherwise, if the budget is acceptable or missing, generate the itinerary and respond strictly in JSON format matching this schema. ALL costs and budget estimations MUST be strictly calculated in ${currency}. Do not use USD unless requested:
     {
       "tripTitle": "String (short, catchy — e.g. 'Exploring Kyoto')",
       "summary": "String",
       "safetyTips": ["String"],
       "packingItems": [{"item": "String", "category": "String"}],
-      "estimatedTotalBudgetUSD": 0,
+      "estimatedTotalBudget": 0,
       "days": [
         {
           "dayNumber": 1,
