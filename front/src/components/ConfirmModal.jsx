@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { X, AlertTriangle } from 'lucide-react';
 
 export default function ConfirmModal({ 
@@ -12,8 +13,8 @@ export default function ConfirmModal({
 }) {
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" 
@@ -61,6 +62,7 @@ export default function ConfirmModal({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
