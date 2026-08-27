@@ -98,6 +98,10 @@ export const generateTripItinerary = async (userId, tripData) => {
 
   const aiResult = await executeAiPrompt(prompt, "You are a professional travel planner. Always tailor content specifically to the named destination.", mockFallback);
 
+  if (aiResult === mockFallback) {
+    throw new ApiError(503, "AI Services are currently experiencing high traffic or rate limits. Please try generating the itinerary again in a few moments.");
+  }
+
   if (aiResult.error) {
     throw new ApiError(400, aiResult.error);
   }
@@ -131,7 +135,10 @@ export const generateTripItinerary = async (userId, tripData) => {
     destination: destination?._id || null,
     startDate: start,
     endDate: end,
-    budget: { totalAmount: parseBudget(aiResult.estimatedTotalBudget || aiResult.estimatedTotalBudgetUSD), spentAmount: 0 },
+    budget: { 
+      totalAmount: tripData.budgetAmount ? parseBudget(tripData.budgetAmount) : parseBudget(aiResult.estimatedTotalBudget || aiResult.estimatedTotalBudgetUSD || 0), 
+      spentAmount: 0 
+    },
     status: "PLANNED",
     notes: aiResult.summary || "",
     bannerImage,
@@ -275,6 +282,10 @@ export const generateTravelJournal = async (userId, { tripId }) => {
   };
 
   const aiResult = await executeAiPrompt(prompt, "You are a travel journalist.", mockFallback);
+
+  if (aiResult === mockFallback) {
+    throw new ApiError(503, "AI Services are currently experiencing high traffic. Please try generating the journal again in a few moments.");
+  }
 
   const journal = await TravelJournal.create({
     trip: tripId,

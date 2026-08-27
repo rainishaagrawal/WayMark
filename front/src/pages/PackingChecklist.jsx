@@ -1,3 +1,4 @@
+import ConfirmModal from '../components/ConfirmModal';
 import React, { useState, useEffect } from 'react';
 import { PackageCheck, CheckCircle2, Circle, Plus, Trash2, Loader2, Sparkles, ChevronDown } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -17,6 +18,7 @@ const CATEGORY_COLORS = {
 };
 
 export default function PackingChecklist() {
+  const [confirmModal, setConfirmModal] = React.useState({ isOpen: false, deleteId: null, message: '' });
   const { trips } = useTrips();
   const [selectedTripId, setSelectedTripId] = useState('');
   const [checklist, setChecklist] = useState(null);
@@ -294,6 +296,7 @@ export default function PackingChecklist() {
           </div>
         </div>
       )}
+          <ConfirmModal isOpen={confirmModal.isOpen} onClose={() => setConfirmModal({ isOpen: false, deleteId: null, message: '' })} onConfirm={confirmDelete} title="Confirm Delete" message={confirmModal.message} />
     </div>
   );
 }

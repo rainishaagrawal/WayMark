@@ -1,3 +1,4 @@
+import ConfirmModal from '../components/ConfirmModal';
 import React, { useState, useEffect } from 'react';
 import { Users, UserPlus, ShieldCheck, Copy, Trash2, X, Loader2, Plus, MapPin, DollarSign, Calendar, Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -76,9 +77,16 @@ export default function GroupTrips() {
     }
   };
 
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, deleteId: null, message: '' });
+
   const handleDelete = async (e, id) => {
     e.stopPropagation();
-    if (!window.confirm('Delete this group trip? All members will lose access.')) return;
+    setConfirmModal({ isOpen: true, deleteId: id, message: 'Delete this group trip? All members will lose access.' });
+  };
+
+  const confirmDelete = async () => {
+    const id = confirmModal.deleteId;
+    if (!id) return;
     try {
       await api.delete(`/groups/${id}`);
       toast.success('Group trip deleted');
@@ -86,6 +94,7 @@ export default function GroupTrips() {
     } catch (e) {
       toast.error(e.message || 'Failed to delete group trip');
     }
+    setConfirmModal({ isOpen: false, deleteId: null, message: '' });
   };
 
   const openGroupDetail = async (group) => {
@@ -396,6 +405,7 @@ export default function GroupTrips() {
           </div>
         </div>
       )}
+          <ConfirmModal isOpen={confirmModal.isOpen} onClose={() => setConfirmModal({ isOpen: false, deleteId: null, message: '' })} onConfirm={confirmDelete} title="Confirm Delete" message={confirmModal.message} />
     </div>
   );
 }

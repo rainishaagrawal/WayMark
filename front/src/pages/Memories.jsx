@@ -1,3 +1,4 @@
+import ConfirmModal from '../components/ConfirmModal';
 import React, { useState, useEffect, useRef } from 'react';
 import { Camera, Plus, Loader2, Trash2, Share2, X, Upload, Search, Pencil, MapPin, Calendar, Bookmark } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -224,8 +225,15 @@ export default function Memories() {
     }
   };
 
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, deleteId: null, message: '' });
+
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this memory?')) return;
+    setConfirmModal({ isOpen: true, deleteId: id, message: 'Delete this memory?' });
+  };
+
+  const confirmDelete = async () => {
+    const id = confirmModal.deleteId;
+    if (!id) return;
     try {
       await api.delete(`/memory/${id}`);
       setMemories((prev) => prev.filter((m) => m._id !== id));
@@ -233,6 +241,7 @@ export default function Memories() {
     } catch (e) {
       toast.error(e.message || 'Failed to delete memory');
     }
+    setConfirmModal({ isOpen: false, deleteId: null, message: '' });
   };
 
   const handleShare = async (mem) => {
@@ -496,6 +505,7 @@ export default function Memories() {
           onSave={() => fetchMemories()}
         />
       )}
+          <ConfirmModal isOpen={confirmModal.isOpen} onClose={() => setConfirmModal({ isOpen: false, deleteId: null, message: '' })} onConfirm={confirmDelete} title="Confirm Delete" message={confirmModal.message} />
     </div>
   );
 }

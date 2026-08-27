@@ -1,3 +1,4 @@
+import ConfirmModal from '../components/ConfirmModal';
 import React, { useState } from 'react';
 import { MapPin, Calendar, Plus, ArrowUpRight, CheckCircle2, Trash2, Loader2, Search, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -20,12 +21,20 @@ export default function Trips() {
   const [processingId, setProcessingId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, deleteId: null, message: '' });
+
   const handleDelete = async (e, tripId) => {
     e.stopPropagation();
-    if (!window.confirm('Delete this trip? This will also remove its packing list, journal entries and expenses.')) return;
+    setConfirmModal({ isOpen: true, deleteId: tripId, message: 'Delete this trip? This will also remove its packing list, journal entries and expenses.' });
+  };
+
+  const confirmDelete = async () => {
+    const tripId = confirmModal.deleteId;
+    if (!tripId) return;
     setProcessingId(tripId);
     await deleteTrip(tripId);
     setProcessingId(null);
+    setConfirmModal({ isOpen: false, deleteId: null, message: '' });
   };
 
   const handleComplete = async (e, tripId) => {
@@ -205,6 +214,7 @@ export default function Trips() {
           )}
         </div>
       )}
+          <ConfirmModal isOpen={confirmModal.isOpen} onClose={() => setConfirmModal({ isOpen: false, deleteId: null, message: '' })} onConfirm={confirmDelete} title="Confirm Delete" message={confirmModal.message} />
     </div>
   );
 }

@@ -36,7 +36,10 @@ export const buildItineraryPrompt = ({ destination, originCity, days, budget, cu
       ]
     }
     
-    IMPORTANT: Make the itinerary genuinely unique to "${destination}" - use real, specific, well-known landmarks.
+    IMPORTANT GEOGRAPHY & ROUTING RULES:
+    1. Make the itinerary genuinely unique to "${destination}" - you MUST include the real, famous, must-visit landmarks of this location.
+    2. SMART ROUTING: Group activities for each day by PROXIMITY (minimum distance). Ensure morning, afternoon, and evening locations for a single day are close to each other so the traveler doesn't waste time traveling back and forth across the city.
+    3. Ensure the descriptions are detailed and explain WHY the user should visit.
   `;
 };
 
