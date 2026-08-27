@@ -22,7 +22,9 @@ export const detectLandmarkFromImage = async (fileBuffer, mimeType = "image/jpeg
 
   const detectionResult = await executeAiPrompt(prompt, "You are a Vision AI for Landmark Detection.", mockFallback, imageData);
 
-  // Removed the strict error block so that the app can gracefully return the mock fallback if the AI vision API fails.
+  if (detectionResult === mockFallback) {
+    throw new Error("Failed to detect landmark from the image. Please try a clearer image or try again later.");
+  }
 
   let nearbyPois = null;
   try {
