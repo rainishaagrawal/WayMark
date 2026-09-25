@@ -11,14 +11,13 @@ export const buildItineraryPrompt = ({ destination, originCity, days, budget, cu
     - Food Preference: ${foodPref}
     - Travel Style: ${travelStyle}
 
-    CRITICAL BUDGET VALIDATION:
-    If the user provided an exact Budget and an Origin City, you MUST validate if the budget is practically possible to cover average RETURN FLIGHTS from ${originCity} to ${destination} PLUS basic accommodation, food, and transport for ${days} days.
-    If the budget is impossibly low for this entire trip, ABORT the itinerary generation and return ONLY this JSON format:
-    {
-      "error": "Your budget of ${budget} ${currency} is too low for a ${days}-day trip to ${destination} from ${originCity}. A realistic minimum is roughly [Calculate Minimum Here] ${currency}."
-    }
+    CRITICAL BUDGET INSTRUCTION:
+    You MUST NEVER abort or reject the user's budget, no matter how low it is. ALWAYS generate the full itinerary.
+    1. Calculate a realistic minimum cost for the trip (e.g., Train/Bus for domestic, cheapest Economy Flight for international).
+    2. If the user's budget is SIGNIFICANTLY LOWER than this realistic minimum, simply add a friendly warning at the VERY BEGINNING of your "summary" field (e.g., "⚠️ Note: Your budget of ${budget} ${currency} is extremely tight for this destination. A realistic minimum is roughly [Calculate] ${currency}. ").
+    3. Regardless of the budget, adjust the suggested activities to be as cheap as possible and generate the complete itinerary. DO NOT throw any errors.
 
-    Otherwise, if the budget is acceptable or missing, generate the itinerary and respond strictly in JSON format matching this schema. ALL costs and budget estimations MUST be strictly calculated in ${currency}. Do not use USD unless requested:
+    Generate the itinerary strictly in JSON format matching this schema. Adjust the suggested transport (flight vs train) and activities to fit within their ${budget} ${currency}. All costs MUST be estimated in ${currency}:
     {
       "tripTitle": "String (short, catchy — e.g. 'Exploring Kyoto')",
       "summary": "String",
@@ -26,10 +25,11 @@ export const buildItineraryPrompt = ({ destination, originCity, days, budget, cu
       "packingItems": [{"item": "String", "category": "String"}],
       "estimatedTotalBudget": 0,
       "transportOptions": [
+        // YOU MUST PROVIDE MULTIPLE MODES for comparison (e.g., Flight, Train, Bus, Car) if possible.
         {
-          "mode": "String (Flight, Train, Bus, Car)",
-          "approxCost": "String",
-          "duration": "String"
+          "mode": "String (Flight / Train / Bus / Car)",
+          "approxCost": "String (MUST be Total Round-Trip / Return cost)",
+          "duration": "String (One-way travel time)"
         }
       ],
       "days": [
@@ -44,9 +44,10 @@ export const buildItineraryPrompt = ({ destination, originCity, days, budget, cu
     }
     
     IMPORTANT GEOGRAPHY & ROUTING RULES:
-    1. Make the itinerary genuinely unique to "${destination}" - you MUST include the real, famous, must-visit landmarks of this location.
-    2. SMART ROUTING: Group activities for each day by PROXIMITY (minimum distance). Ensure morning, afternoon, and evening locations for a single day are close to each other so the traveler doesn't waste time traveling back and forth across the city.
-    3. Ensure the descriptions are detailed and explain WHY the user should visit.
+    1. STRICT GEOGRAPHICAL ACCURACY: You MUST ONLY include places, landmarks, and attractions that are physically located in or very near "${destination}". DO NOT hallucinate or include landmarks from other cities, states, or countries (e.g. do not put a Vadodara palace in an Indore itinerary). Double-check the real-world location of every place you suggest.
+    2. Make the itinerary genuinely unique to "${destination}" - you MUST include the real, famous, must-visit landmarks of this location.
+    3. SMART ROUTING: Group activities for each day by PROXIMITY (minimum distance). Ensure morning, afternoon, and evening locations for a single day are close to each other so the traveler doesn't waste time traveling back and forth across the city.
+    4. Ensure the descriptions are detailed and explain WHY the user should visit.
   `;
 };
 

@@ -19,7 +19,6 @@ export default function AIPlanner() {
   const [destinationName, setDestinationName] = useState(location.state?.destinationName || '');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [budget, setBudget] = useState('');
   const [interests, setInterests] = useState('');
   const [foodPref, setFoodPref] = useState('ANYTHING');
   const [travelStyle, setTravelStyle] = useState('SOLO');
@@ -44,19 +43,16 @@ export default function AIPlanner() {
 
   const handleGenerateAI = async (e) => {
     e.preventDefault();
-    if (!originCity || !destinationName || !startDate || !endDate || !budget) {
-      toast.error('Please fill in origin, destination, dates, and budget');
+    if (!originCity || !destinationName || !startDate || !endDate) {
+      toast.error('Please fill in origin, destination, and dates');
       return;
     }
     if (new Date(startDate) > new Date(endDate)) {
       toast.error('End date cannot be before the start date');
       return;
     }
-    if (Number(budget) <= 0) {
-      toast.error('Budget must be greater than 0');
-      return;
-    }
     setIsGenerating(true);
+    setAiError(null);
     toast.loading('AI is crafting your itinerary...', { id: 'ai_gen' });
 
     try {
@@ -65,7 +61,6 @@ export default function AIPlanner() {
         destinationName,
         startDate,
         endDate,
-        budget,
         currency: currencyInfo?.code || 'USD',
         interests: interests.split(',').map((s) => s.trim()).filter(Boolean),
         foodPref,
@@ -232,20 +227,7 @@ export default function AIPlanner() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[#8B8B8B] font-semibold mb-1 uppercase text-[10px]">Total Budget ({currencyInfo.symbol})</label>
-                <div className="relative">
-                  <Wallet className="w-4 h-4 text-[#8B8B8B] absolute left-3 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="number"
-                    value={budget}
-                    onChange={(e) => setBudget(e.target.value)}
-                    placeholder="e.g. 1500"
-                    className="w-full bg-white border border-black/[0.05] text-[#2A2A2A] pl-9 pr-3 py-3 rounded-xl focus:outline-none focus:border-[#D4AF37]/50 shadow-sm appearance-none"
-                    required
-                  />
-                </div>
-              </div>
+
 
               <div>
                 <label className="block text-[#8B8B8B] font-semibold mb-1 uppercase text-[10px]">Interests (comma separated)</label>

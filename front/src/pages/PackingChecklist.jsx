@@ -92,14 +92,20 @@ export default function PackingChecklist() {
   };
 
   const deleteChecklist = async () => {
-    if (!window.confirm('Delete this entire packing list?')) return;
+    setConfirmModal({ isOpen: true, deleteId: checklist._id, message: 'Delete this entire packing list?' });
+  };
+
+  const confirmDelete = async () => {
+    const listId = confirmModal.deleteId;
+    if (!listId) return;
     try {
-      await api.delete(`/packing/${checklist._id}`);
+      await api.delete(`/packing/${listId}`);
       setChecklist(null);
       toast.success('Packing list deleted');
     } catch (e) {
       toast.error(e.message || 'Failed to delete checklist');
     }
+    setConfirmModal({ isOpen: false, deleteId: null, message: '' });
   };
 
   const selectedTrip = trips.find((t) => t._id === selectedTripId);

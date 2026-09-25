@@ -9,6 +9,7 @@ export default function LandmarkRecognition() {
   const [scanning, setScanning] = useState(false);
   const [result, setResult] = useState(null);
   const fileInputRef = useRef(null);
+  const isScanningRef = useRef(false);
 
   const handleFileSelect = (file) => {
     if (!file || !file.type.startsWith('image/')) {
@@ -31,6 +32,9 @@ export default function LandmarkRecognition() {
       toast.error('Please upload a photo first');
       return;
     }
+    if (isScanningRef.current) return; // Prevent double clicks
+    
+    isScanningRef.current = true;
     setScanning(true);
     toast.loading('AI Computer Vision analyzing landmark details...', { id: 'vision' });
 
@@ -43,6 +47,7 @@ export default function LandmarkRecognition() {
     } catch (err) {
       toast.error(err.message || 'Failed to analyze image', { id: 'vision' });
     } finally {
+      isScanningRef.current = false;
       setScanning(false);
     }
   };

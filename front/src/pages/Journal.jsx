@@ -348,7 +348,12 @@ export default function Journal() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this journal entry?')) return;
+    setConfirmModal({ isOpen: true, deleteId: id, message: 'Delete this journal entry?' });
+  };
+
+  const confirmDelete = async () => {
+    const id = confirmModal.deleteId;
+    if (!id) return;
     try {
       await api.delete(`/journal/${id}`);
       setEntries((prev) => prev.filter((e) => e._id !== id));
@@ -356,6 +361,7 @@ export default function Journal() {
     } catch (e) {
       toast.error(e.message || 'Failed to delete entry');
     }
+    setConfirmModal({ isOpen: false, deleteId: null, message: '' });
   };
 
   const handleEdit = (entry) => {

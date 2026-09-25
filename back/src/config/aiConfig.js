@@ -6,7 +6,7 @@ const GROQ_API_KEY = process.env.GROQ_API_KEY || "MOCK_GROQ_KEY";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${GEMINI_API_KEY}`;
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
-export const callGeminiAPI = async (prompt, systemInstruction = "", imageData = null, retries = 3) => {
+export const callGeminiAPI = async (prompt, systemInstruction = "", imageData = null) => {
   try {
     const parts = [];
     if (systemInstruction) parts.push({ text: systemInstruction });
@@ -20,46 +20,44 @@ export const callGeminiAPI = async (prompt, systemInstruction = "", imageData = 
     }
     parts.push({ text: prompt });
 
-    for (let attempt = 1; attempt <= retries; attempt++) {
-      try {
-        const response = await axios.post(
-          GEMINI_URL,
+    const response = await axios.post(
+      GEMINI_URL,
+      {
+        contents: [
           {
-            contents: [
-              {
-                parts: parts,
-              },
-            ],
-            generationConfig: {
-              responseMimeType: "application/json",
-              temperature: 0.7,
-            },
+            parts: parts,
           },
-          { headers: { "Content-Type": "application/json" } }
-        );
+        ],
+        generationConfig: {
+          responseMimeType: "application/json",
+          temperature: 0.7,
+        },
+      },
+      { headers: { "Content-Type": "application/json" } }
+    );
 
-        let text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!text) throw new Error("Empty response from Gemini API");
-        text = text.replace(/```json/gi, "").replace(/```/g, "").trim();
-        try {
-          return JSON.parse(text);
-        } catch (parseErr) {
-          console.warn("JSON Parse Failed for text:", text);
-          throw parseErr;
-        }
-      } catch (err) {
-        if (err.response?.status === 429 && attempt < retries) {
-          console.warn(`Gemini 429 Quota Exceeded. Retrying in 5 seconds... (Attempt ${attempt}/${retries})`);
-          await new Promise(resolve => setTimeout(resolve, 5000));
-        } else {
-          throw err;
-        }
-      }
+    let text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) throw new Error("Empty response from Gemini API");
+    
+    // Attempt to extract JSON from markdown or raw text
+    const jsonMatch = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+    if (jsonMatch) {
+      text = jsonMatch[0];
+    } else {
+      text = text.replace(/```json/gi, "").replace(/```/g, "").trim();
+    }
+
+    try {
+      return JSON.parse(text);
+    } catch (parseErr) {
+      console.warn("JSON Parse Failed for Gemini text:", text);
+      throw parseErr;
     }
   } catch (error) {
-    console.warn("⚠️ Gemini API call failed or unparseable, attempting Groq fallback:", error.message);
-    if (error.response?.data) {
-      console.warn("Gemini Error Data:", JSON.stringify(error.response.data, null, 2));
+    if (error.response?.status === 429) {
+      console.warn("⚠️ Gemini Quota Exceeded (429). Instantly falling back to Groq.");
+    } else {
+      console.warn("⚠️ Gemini API call failed, attempting Groq fallback:", error.message);
     }
     throw error;
   }
@@ -75,7 +73,6 @@ export const callGroqAPI = async (prompt, systemInstruction = "") => {
           ...(systemInstruction ? [{ role: "system", content: systemInstruction }] : []),
           { role: "user", content: prompt },
         ],
-        response_format: { type: "json_object" },
         temperature: 0.7,
       },
       {
@@ -86,8 +83,23 @@ export const callGroqAPI = async (prompt, systemInstruction = "") => {
       }
     );
 
-    const content = response.data?.choices?.[0]?.message?.content;
-    return JSON.parse(content);
+    let text = response.data?.choices?.[0]?.message?.content;
+    if (!text) throw new Error("Empty response from Groq API");
+    
+    // Attempt to extract JSON from markdown or raw text
+    const jsonMatch = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+    if (jsonMatch) {
+      text = jsonMatch[0];
+    } else {
+      text = text.replace(/```json/gi, "").replace(/```/g, "").trim();
+    }
+
+    try {
+      return JSON.parse(text);
+    } catch (parseErr) {
+      console.warn("JSON Parse Failed for Groq text:", text);
+      throw parseErr;
+    }
   } catch (error) {
     console.error("❌ Groq API call failed:", error.message);
     if (error.response && error.response.data) {

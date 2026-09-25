@@ -68,6 +68,71 @@ export const generateTripItinerary = async (userId, tripData) => {
   }
 
   const diffDays = Math.ceil(Math.abs(end - start) / (1000 * 60 * 60 * 24)) + 1;
+  
+  // --- GLOBAL CACHE & SLICING LOGIC ---
+  if (destination) {
+    const tenDaysAgo = new Date(Date.now() - 10 * 24 * 60 * 60 * 1000);
+    // Find the latest public trip to this destination generated in the last 10 days
+    const cachedTrip = await Trip.findOne({ 
+      destination: destination._id, 
+      status: "PLANNED",
+      createdAt: { $gte: tenDaysAgo }
+    }).sort({ createdAt: -1 });
+
+    if (cachedTrip) {
+      // Check if the cached trip has enough days
+      const cachedDaysCount = await TripDay.countDocuments({ trip: cachedTrip._id });
+      if (diffDays <= cachedDaysCount) {
+        console.log(`[Cache Hit] Serving ${diffDays} days from a ${cachedDaysCount}-day cached trip to ${destinationName}`);
+        
+        // Clone the Trip
+        const newTrip = await Trip.create({
+          user: userId,
+          destination: destination._id,
+          title: cachedTrip.title,
+          summary: cachedTrip.summary,
+          startDate,
+          endDate,
+          budget,
+          budgetAmount: tripData.budgetAmount || 0,
+          currency: tripData.currency || "USD",
+          bannerImage: cachedTrip.bannerImage,
+          aiMeta: cachedTrip.aiMeta,
+          status: "PLANNED",
+        });
+
+        // Clone TripDays
+        const cachedTripDays = await TripDay.find({ trip: cachedTrip._id }).sort({ dayIndex: 1 }).limit(diffDays);
+        let currentDay = new Date(startDate);
+        
+        for (let i = 0; i < diffDays; i++) {
+          const cDay = cachedTripDays[i];
+          if (cDay) {
+            await TripDay.create({
+              trip: newTrip._id,
+              date: new Date(currentDay),
+              dayIndex: i,
+              title: cDay.title,
+              morningActivities: cDay.morningActivities,
+              afternoonActivities: cDay.afternoonActivities,
+              eveningActivities: cDay.eveningActivities,
+            });
+            currentDay.setDate(currentDay.getDate() + 1);
+          }
+        }
+        
+        // Feed the Travel DNA quietly
+        nudgeTravelDnaFromTrip(userId, newTrip).catch((err) =>
+          console.error("Failed to update Travel DNA:", err.message)
+        );
+        markUserHasCreatedFirstTrip(userId).catch(console.error);
+
+        return newTrip;
+      }
+    }
+  }
+  // --- END CACHE LOGIC ---
+
   const numDays = Math.min(Math.max(diffDays, 1), 14);
 
   const userRecord = await User.findById(userId);

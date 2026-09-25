@@ -2,6 +2,9 @@ import Trip from "../models/Trip.js";
 import Expense from "../models/Expense.js";
 import Analytics from "../models/Analytics.js";
 
+const analyticsCache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes cache to avoid DB spam on every dashboard reload
+
 /**
  * Analytics Service for user travel stats.
  * Recomputed on-demand (GET /analytics/user) and also triggered internally
@@ -9,6 +12,12 @@ import Analytics from "../models/Analytics.js";
  * new user and fill in automatically as trips happen.
  */
 export const getUserAnalytics = async (userId) => {
+  const userIdStr = userId.toString();
+  const cached = analyticsCache.get(userIdStr);
+  if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
+    return cached.data;
+  }
+
   const [trips, expenses] = await Promise.all([
     Trip.find({ user: userId }).populate("destination"),
     Expense.find({ paidBy: userId }),
@@ -66,6 +75,14 @@ export const getUserAnalytics = async (userId) => {
     { upsert: true, new: true }
   );
 
+  const result = { ...analytics.toObject(), monthlySpending, topDestinations };
+  analyticsCache.set(userIdStr, { data: result, timestamp: Date.now() });
+
   // Return extra dynamic fields not stored in the schema
-  return { ...analytics.toObject(), monthlySpending, topDestinations };
+  return result;
+};
+
+// Also export a helper to clear cache when trips or expenses change
+export const clearUserAnalyticsCache = (userId) => {
+  analyticsCache.delete(userId.toString());
 };
