@@ -73,13 +73,15 @@ export const callGroqAPI = async (prompt, systemInstruction = "") => {
           ...(systemInstruction ? [{ role: "system", content: systemInstruction }] : []),
           { role: "user", content: prompt },
         ],
-        temperature: 0.7,
+        temperature: 0.5,
+        max_tokens: 4096,
       },
       {
         headers: {
           Authorization: `Bearer ${GROQ_API_KEY}`,
           "Content-Type": "application/json",
         },
+        timeout: 25000,
       }
     );
 
@@ -110,13 +112,24 @@ export const callGroqAPI = async (prompt, systemInstruction = "") => {
 };
 
 export const executeAiPrompt = async (prompt, systemInstruction = "", mockFallback = {}, imageData = null) => {
-  try {
-    return await callGeminiAPI(prompt, systemInstruction, imageData);
-  } catch (geminiError) {
+  // If an image is provided (e.g. Landmark Scanner), route directly to Gemini Vision
+  if (imageData) {
     try {
-      if (imageData) throw new Error("Groq fallback not configured for vision");
-      return await callGroqAPI(prompt, systemInstruction);
-    } catch (groqError) {
+      return await callGeminiAPI(prompt, systemInstruction, imageData);
+    } catch (geminiError) {
+      console.error("Gemini Vision failed:", geminiError.message);
+      return mockFallback;
+    }
+  }
+
+  // For text prompts (Trip Generation, Chat, Journal, etc.), prioritize Groq for ultra-fast (2-3s) generation
+  try {
+    return await callGroqAPI(prompt, systemInstruction);
+  } catch (groqError) {
+    console.warn("Groq failed, attempting Gemini fallback:", groqError.message);
+    try {
+      return await callGeminiAPI(prompt, systemInstruction, null);
+    } catch (geminiError) {
       console.error("💥 All AI Services failed. Returning intelligent mock fallback.");
       return mockFallback;
     }

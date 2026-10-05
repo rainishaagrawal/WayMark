@@ -102,24 +102,28 @@ export const generateTripItinerary = async (userId, tripData) => {
         });
 
         // Clone TripDays
-        const cachedTripDays = await TripDay.find({ trip: cachedTrip._id }).sort({ dayIndex: 1 }).limit(diffDays);
+        const cachedTripDays = await TripDay.find({ trip: cachedTrip._id }).sort({ dayNumber: 1 }).limit(diffDays);
         let currentDay = new Date(startDate);
+        const clonedDaysIds = [];
         
         for (let i = 0; i < diffDays; i++) {
           const cDay = cachedTripDays[i];
           if (cDay) {
-            await TripDay.create({
+            const newDay = await TripDay.create({
               trip: newTrip._id,
+              dayNumber: i + 1,
               date: new Date(currentDay),
-              dayIndex: i,
-              title: cDay.title,
-              morningActivities: cDay.morningActivities,
-              afternoonActivities: cDay.afternoonActivities,
-              eveningActivities: cDay.eveningActivities,
+              morning: cDay.morning || [],
+              afternoon: cDay.afternoon || [],
+              evening: cDay.evening || [],
+              notes: cDay.notes || "",
             });
+            clonedDaysIds.push(newDay._id);
             currentDay.setDate(currentDay.getDate() + 1);
           }
         }
+        newTrip.tripDays = clonedDaysIds;
+        await newTrip.save();
         
         // Feed the Travel DNA quietly
         nudgeTravelDnaFromTrip(userId, newTrip).catch((err) =>
@@ -127,7 +131,20 @@ export const generateTripItinerary = async (userId, tripData) => {
         );
         markUserHasCreatedFirstTrip(userId).catch(console.error);
 
-        return newTrip;
+        const fullCachedDays = await TripDay.find({ trip: newTrip._id }).sort({ dayNumber: 1 });
+        const formattedItinerary = {
+          tripTitle: newTrip.title,
+          summary: newTrip.summary,
+          days: fullCachedDays.map((d) => ({
+            dayNumber: d.dayNumber,
+            title: d.title || `Day ${d.dayNumber}`,
+            morning: d.morning || [],
+            afternoon: d.afternoon || [],
+            evening: d.evening || [],
+          })),
+        };
+
+        return { trip: newTrip, itinerary: formattedItinerary, weather: weatherInfo };
       }
     }
   }
@@ -242,7 +259,7 @@ export const generateTripItinerary = async (userId, tripData) => {
 
   for (let i = 0; i < daysArray.length; i++) {
     const day = daysArray[i];
-    const dNum = day.dayNumber || (i + 1);
+    const dNum = i + 1;
     const tripDay = await TripDay.create({
       trip: trip._id,
       dayNumber: dNum,
