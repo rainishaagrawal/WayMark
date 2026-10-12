@@ -52,7 +52,6 @@ export default function AIPlanner() {
       return;
     }
     setIsGenerating(true);
-    setAiError(null);
     toast.loading('AI is crafting your itinerary...', { id: 'ai_gen' });
 
     try {
