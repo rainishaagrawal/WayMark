@@ -124,14 +124,19 @@ export const executeAiPrompt = async (prompt, systemInstruction = "", mockFallba
   }
 
   // For text prompts (Trip Generation, Chat, Journal, etc.), prioritize Groq for ultra-fast (2-3s) generation
+  console.log("   ⚡ Sending prompt to Groq API (Primary LLM)...");
   try {
-    return await callGroqAPI(prompt, systemInstruction);
+    const groqRes = await callGroqAPI(prompt, systemInstruction);
+    console.log("   ⚡ Groq returned successfully!");
+    return groqRes;
   } catch (groqError) {
-    console.warn("Groq failed, attempting Gemini fallback:", groqError.message);
+    console.warn("   ⚠️ Groq API failed (" + groqError.message + "). Switching to Gemini (Backup LLM)...");
     try {
-      return await callGeminiAPI(prompt, systemInstruction, null);
+      const geminiRes = await callGeminiAPI(prompt, systemInstruction, null);
+      console.log("   ✨ Gemini returned successfully!");
+      return geminiRes;
     } catch (geminiError) {
-      console.error("💥 All AI Services failed. Returning intelligent mock fallback.");
+      console.error("   💥 Both Groq and Gemini failed (" + geminiError.message + ").");
       return mockFallback;
     }
   }

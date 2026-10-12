@@ -22,6 +22,11 @@ import { ApiError } from "../utils/ApiError.js";
  * the interests/style used to generate it.
  */
 export const generateTripItinerary = async (userId, tripData) => {
+  const tripStartTime = Date.now();
+  console.log(`\n======================================================`);
+  console.log(`🚀 [TRIP PLANNER] Request received for: "${tripData.destinationName}"`);
+  console.log(`⏱️ [START] Beginning processing at ${new Date().toLocaleTimeString()}...`);
+
   const {
     destinationName,
     startDate,
@@ -35,14 +40,23 @@ export const generateTripItinerary = async (userId, tripData) => {
   let coords = null;
   let weatherInfo = null;
 
+  console.log(`📍 [STEP 1/5] Fetching Geocoding & Weather for "${destinationName}"...`);
+  const step1Start = Date.now();
   try {
-    const coordResults = await getCoordinates(destinationName);
+    const coordResults = await Promise.race([
+      getCoordinates(destinationName),
+      new Promise((_, reject) => setTimeout(() => reject(new Error("Geocoding timeout (3s)")), 3000))
+    ]);
     if (coordResults?.length > 0) {
       coords = { lat: coordResults[0].lat, lon: coordResults[0].lon };
-      weatherInfo = await getCurrentWeather(coords);
+      weatherInfo = await Promise.race([
+        getCurrentWeather(coords),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Weather timeout (3s)")), 3000))
+      ]);
     }
+    console.log(`   ✅ Geocoding & Weather resolved in ${Date.now() - step1Start}ms`);
   } catch (err) {
-    console.warn("Weather/Geocoding context skipped:", err.message);
+    console.warn(`   ⚠️ Geocoding/Weather skipped (${Date.now() - step1Start}ms):`, err.message);
   }
 
   let destination = null;
@@ -178,7 +192,10 @@ export const generateTripItinerary = async (userId, tripData) => {
     })),
   };
 
+  console.log(`🤖 [STEP 2/5] Calling AI Engine (Groq -> Gemini fallback) for ${numDays}-day plan...`);
+  const aiCallStart = Date.now();
   const aiResult = await executeAiPrompt(prompt, "You are a professional travel planner. Always tailor content specifically to the named destination.", mockFallback);
+  console.log(`   ✅ AI Response received in ${((Date.now() - aiCallStart) / 1000).toFixed(2)}s`);
 
   if (aiResult === mockFallback) {
     throw new ApiError(503, "AI Services are currently experiencing high traffic or rate limits. Please try generating the itinerary again in a few moments.");
@@ -188,6 +205,8 @@ export const generateTripItinerary = async (userId, tripData) => {
     throw new ApiError(400, aiResult.error);
   }
 
+  console.log(`💾 [STEP 3/5] Saving Trip & Itinerary into Database...`);
+  const dbSaveStart = Date.now();
   const bannerImage = getDestinationImage(destinationName);
 
   const parseBudget = (val) => {
@@ -307,6 +326,10 @@ export const generateTripItinerary = async (userId, tripData) => {
   } catch (e) {}
 
   const standardizedItinerary = Array.isArray(aiResult) ? { days: aiResult } : aiResult;
+
+  const totalTime = ((Date.now() - tripStartTime) / 1000).toFixed(2);
+  console.log(`🎉 [SUCCESS] Trip "${trip.title}" created in ${totalTime}s! (DB save took ${Date.now() - dbSaveStart}ms)`);
+  console.log(`======================================================\n`);
 
   return { trip, itinerary: standardizedItinerary, weather: weatherInfo };
 };
