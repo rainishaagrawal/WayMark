@@ -1,9 +1,9 @@
+import "dotenv/config";
 import axios from "axios";
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "MOCK_GEMINI_KEY";
-const GROQ_API_KEY = process.env.GROQ_API_KEY || "MOCK_GROQ_KEY";
+const getGeminiKey = () => process.env.GEMINI_API_KEY || "MOCK_GEMINI_KEY";
+const getGroqKey = () => process.env.GROQ_API_KEY || "MOCK_GROQ_KEY";
 
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${GEMINI_API_KEY}`;
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 export const callGeminiAPI = async (prompt, systemInstruction = "", imageData = null) => {
@@ -20,8 +20,9 @@ export const callGeminiAPI = async (prompt, systemInstruction = "", imageData = 
     }
     parts.push({ text: prompt });
 
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${getGeminiKey()}`;
     const response = await axios.post(
-      GEMINI_URL,
+      geminiUrl,
       {
         contents: [
           {
@@ -78,7 +79,7 @@ export const callGroqAPI = async (prompt, systemInstruction = "") => {
       },
       {
         headers: {
-          Authorization: `Bearer ${GROQ_API_KEY}`,
+          Authorization: `Bearer ${getGroqKey()}`,
           "Content-Type": "application/json",
         },
         timeout: 25000,
