@@ -1,53 +1,57 @@
-export const buildItineraryPrompt = ({ destination, originCity, days, budget, currency, interests, foodPref, travelStyle }) => {
-  const budgetContext = originCity && budget 
-    ? `\n    - Budget: ${budget} ${currency}\n    - Origin City: ${originCity}`
-    : `\n    - Budget Tier: ${budget}`;
+export const buildItineraryPrompt = ({ destination, originCity = "", days, currency = "USD", interests = [], foodPref = "ANYTHING", travelStyle = "SOLO" }) => {
+  const originClause = originCity ? ` starting from "${originCity}"` : "";
+  const interestsList = Array.isArray(interests) && interests.length > 0 ? interests.join(", ") : "Top Attractions & Culture";
 
   return `
     You are an expert AI Travel Planner for WayMark.
-    Generate a detailed ${days}-day travel itinerary for "${destination}".
-    User Preferences:${budgetContext}
-    - Interests: ${Array.isArray(interests) ? interests.join(", ") : interests}
+    Generate a comprehensive, realistic ${days}-day travel itinerary for "${destination}"${originClause}.
+
+    Traveler Profile:
+    - Destination: ${destination}
+    ${originCity ? `- Origin: ${originCity}` : ""}
+    - Duration: ${days} Days
+    - Interests: ${interestsList}
     - Food Preference: ${foodPref}
     - Travel Style: ${travelStyle}
+    - Preferred Currency: ${currency}
 
-    CRITICAL BUDGET INSTRUCTION:
-    You MUST NEVER abort or reject the user's budget, no matter how low it is. ALWAYS generate the full itinerary.
-    1. Calculate a realistic minimum cost for the trip (e.g., Train/Bus for domestic, cheapest Economy Flight for international).
-    2. If the user's budget is SIGNIFICANTLY LOWER than this realistic minimum, simply add a friendly warning at the VERY BEGINNING of your "summary" field (e.g., "⚠️ Note: Your budget of ${budget} ${currency} is extremely tight for this destination. A realistic minimum is roughly [Calculate] ${currency}. ").
-    3. Regardless of the budget, adjust the suggested activities to be as cheap as possible and generate the complete itinerary. DO NOT throw any errors.
+    CRITICAL INSTRUCTIONS:
+    1. STRICT GEOGRAPHICAL ACCURACY: You MUST ONLY include places, attractions, restaurants, and landmarks physically located in "${destination}". Never include landmarks from other cities or states.
+    2. SMART PROXIMITY ROUTING: Group each day's activities by geographic proximity. Morning, afternoon, and evening locations must be close to each other to minimize travel time.
+    3. REALISTIC ESTIMATION: Estimate realistic average costs for transport, stay, food, and activities in ${currency}.
 
-    Generate the itinerary strictly in JSON format matching this schema. Adjust the suggested transport (flight vs train) and activities to fit within their ${budget} ${currency}. All costs MUST be estimated in ${currency}:
+    Respond strictly in valid JSON format matching this schema:
     {
-      "tripTitle": "String (short, catchy — e.g. 'Exploring Kyoto')",
-      "summary": "String",
-      "safetyTips": ["String"],
-      "packingItems": [{"item": "String", "category": "String"}],
+      "tripTitle": "Short catchy title (e.g., 'Discovering the Magic of ${destination}')",
+      "summary": "2-3 sentence engaging overview covering key highlights, best time to explore, and cultural vibe.",
       "estimatedTotalBudget": 0,
+      "safetyTips": ["Practical local travel or safety tip"],
+      "packingItems": [
+        { "item": "Essential item name", "category": "Clothing" }
+      ],
       "transportOptions": [
-        // YOU MUST PROVIDE MULTIPLE MODES for comparison (e.g., Flight, Train, Bus, Car) if possible.
         {
-          "mode": "String (Flight / Train / Bus / Car)",
-          "approxCost": "String (MUST be Total Round-Trip / Return cost)",
-          "duration": "String (One-way travel time)"
+          "mode": "Flight / Train / Bus / Drive",
+          "approxCost": "Estimated return cost in ${currency}",
+          "duration": "One-way duration (e.g. 2h 15m)"
         }
       ],
       "days": [
         {
           "dayNumber": 1,
-          "title": "String",
-          "morning": [{"title": "String", "description": "String", "estimatedCost": 0}],
-          "afternoon": [{"title": "String", "description": "String", "estimatedCost": 0}],
-          "evening": [{"title": "String", "description": "String", "estimatedCost": 0}]
+          "title": "Day theme (e.g., 'Day 1: Historic Old Town & Heritage Walk')",
+          "morning": [
+            { "title": "Real Landmark Name", "description": "Specific reason to visit and what to see", "estimatedCost": 0 }
+          ],
+          "afternoon": [
+            { "title": "Cultural Spot or Local Market", "description": "Local food tasting or market exploration", "estimatedCost": 0 }
+          ],
+          "evening": [
+            { "title": "Scenic Viewpoint / Dinner Spot", "description": "Sunset views, relaxing atmosphere, or local dining", "estimatedCost": 0 }
+          ]
         }
       ]
     }
-    
-    IMPORTANT GEOGRAPHY & ROUTING RULES:
-    1. STRICT GEOGRAPHICAL ACCURACY: You MUST ONLY include places, landmarks, and attractions that are physically located in or very near "${destination}". DO NOT hallucinate or include landmarks from other cities, states, or countries (e.g. do not put a Vadodara palace in an Indore itinerary). Double-check the real-world location of every place you suggest.
-    2. Make the itinerary genuinely unique to "${destination}" - you MUST include the real, famous, must-visit landmarks of this location.
-    3. SMART ROUTING: Group activities for each day by PROXIMITY (minimum distance). Ensure morning, afternoon, and evening locations for a single day are close to each other so the traveler doesn't waste time traveling back and forth across the city.
-    4. Ensure the descriptions are detailed and explain WHY the user should visit.
   `;
 };
 

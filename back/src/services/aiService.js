@@ -37,33 +37,10 @@ export const generateTripItinerary = async (userId, tripData) => {
     travelStyle = "SOLO",
   } = tripData;
 
-  let coords = null;
   let weatherInfo = null;
-
-  console.log(`📍 [STEP 1/5] Fetching Geocoding & Weather for "${destinationName}"...`);
-  const step1Start = Date.now();
-  try {
-    const coordResults = await Promise.race([
-      getCoordinates(destinationName),
-      new Promise((_, reject) => setTimeout(() => reject(new Error("Geocoding timeout (3s)")), 3000))
-    ]);
-    if (coordResults?.length > 0) {
-      coords = { lat: coordResults[0].lat, lon: coordResults[0].lon };
-      weatherInfo = await Promise.race([
-        getCurrentWeather(coords),
-        new Promise((_, reject) => setTimeout(() => reject(new Error("Weather timeout (3s)")), 3000))
-      ]);
-    }
-    console.log(`   ✅ Geocoding & Weather resolved in ${Date.now() - step1Start}ms`);
-  } catch (err) {
-    console.warn(`   ⚠️ Geocoding/Weather skipped (${Date.now() - step1Start}ms):`, err.message);
-  }
-
   let destination = null;
   try {
     destination = await findOrCreateDestinationByName(destinationName, {
-      lat: coords?.lat,
-      lon: coords?.lon,
       category: Array.isArray(interests) ? interests : [interests],
     });
   } catch (destErr) {
@@ -169,7 +146,15 @@ export const generateTripItinerary = async (userId, tripData) => {
   const userRecord = await User.findById(userId);
   const currency = tripData.currency || userRecord?.preferredCurrency || "USD";
 
-  const prompt = buildItineraryPrompt({ destination: destinationName, originCity: tripData.originCity, days: numDays, budget, currency, interests, foodPref, travelStyle });
+  const prompt = buildItineraryPrompt({
+    destination: destinationName,
+    originCity: tripData.originCity,
+    days: numDays,
+    currency,
+    interests,
+    foodPref,
+    travelStyle
+  });
 
   const mockFallback = {
     tripTitle: `Exploring ${destinationName}`,
