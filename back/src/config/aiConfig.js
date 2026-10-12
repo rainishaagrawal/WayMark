@@ -20,7 +20,7 @@ export const callGeminiAPI = async (prompt, systemInstruction = "", imageData = 
     }
     parts.push({ text: prompt });
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${getGeminiKey()}`;
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${getGeminiKey()}`;
     const response = await axios.post(
       geminiUrl,
       {
